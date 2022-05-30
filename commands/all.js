@@ -19,6 +19,10 @@ Transports : Noir (50 cartes)
 Sports : Orange (50 cartes)
 STAFF: Vert FLUO */
 
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
+
 module.exports = {
     data: new SlashCommandBuilder()
     .setName('all')
@@ -29,7 +33,7 @@ module.exports = {
         connection.query(fullsql, function (err, rows, fields) {
             console.log(rows[0])
             if (err) throw err;
-            for (let x = 0; x < rows.length-1; x++) {
+            for (let x = 0; x < rows.length; x++) {
                 console.log("x :" + x)
                 const file = new MessageAttachment(`${rows[x].image_cards}`);
                 const image = rows[x].image_cards.split('/')
@@ -37,8 +41,8 @@ module.exports = {
                 .setTitle(`${rows[x].name_cards}`)
                 .setColor(`${rows[x].color_category}`)
                 .setImage(`attachment://${image[4]}`)
-                .setFooter({ text: 'Yumeko à votre service !'})
-                interaction.channel.send({ embeds: [embed], files: [file], ephemeral:false}) 
+                .setFooter({ text: `Yumeko à votre service !             ${x}/${rows.length}`})
+                interaction.channel.send({ embeds: [embed], files: [file], ephemeral:false})
             }
         })
     },

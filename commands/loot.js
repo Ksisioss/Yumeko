@@ -51,7 +51,7 @@ TODO
 Relancer la lootbox si l'user a déjà la carte.
 */         
 
-function doubleCard(card_value, member, rarity, interaction){
+function doubleCard(card_value, member, rarity, interaction, value){
     connection.query(`SELECT * FROM Cards join Rarity on Cards.id_rarity = Rarity.id_rarity join Category on Cards.id_category = Category.id_category WHERE id_card = ${rarity} ;`, function (err2, rows2, fields) {
         if (err2) throw err2;
         card_value =  Math.floor(101/2)
@@ -73,131 +73,182 @@ function doubleCard(card_value, member, rarity, interaction){
             .setStyle('SUCCESS')
             .setEmoji('<:japoints:972907566579458058>'),
             )
+        .addComponents(
+            new MessageButton()
+            .setCustomId('reload')
+            .setLabel('Relance une fois')
+            .setStyle('PRIMARY')
+            .setEmoji('🔁'),
+            );
+        interaction.channel.send({embeds: [embed], components:[row], files: [file]})
+        console.log("3 "+ card_value)
+        const collector = interaction.channel.createMessageComponentCollector({ time: 15000 });
+            collector.on('collect', async j => {
+                if (j.customId === 'trade') {
+                    var editsql = `UPDATE Player SET ja_points=${(value+card_value)} WHERE discord_id=${member.id};`
+                    console.log("aaaaa" + editsql)
+                    connection.query(editsql, function (err, rows, fields) {
+                        if (err) throw err;
+                    })
+                    interaction.editReply({ content: `Tu as maintenant : ${(value+card_value)} <:japoints:972907566579458058>`, embeds: [], files: [], components: []});;
+                } else if (j.customId === "reload") {
+                }
+            })
+        return(card_value)
+        }
+    );
+}
+        
+module.exports = {
+    data: new SlashCommandBuilder()
+    .setName('loot')
+    .setDescription("Choix de la lootbox à acheter."),
+    async execute(interaction) {
+        var member = interaction.member
+        //console.log(member.id)
+        const checksql = `SELECT ja_points FROM Player WHERE discord_id=${member.id}`
+
+        connection.query(checksql, function(err, row, fields) {
+            console.log(row[0].ja_points)
+        })
+
+        const embed = new MessageEmbed()
+        .setTitle(`**Lootbox**`)
+        .setDescription(`**Commune :**
+                Commun : 75 %, Rare : 25
+        **Rare :**
+        \        Commun : 50 %, Rare : 35%, Epique : 15
+        **Épique :**
+        \        Commun : 40 %, Rare : 30%, Epique : 20%, Légendaire : 10%
+        
+        **Légendaire :**
+        \        Rare : 50 %, Epique : 30%, Légendaire : 20%
+        `)
+        .setFooter({ text: `Yumeko à votre service !`})
+
+        const row = new MessageActionRow()
             .addComponents(
                 new MessageButton()
-                .setCustomId('reload')
-                .setLabel('Relance une fois')
-                .setStyle('PRIMARY')
-                .setEmoji('🔁'),
-                );
-                interaction.reply({embeds: [embed], components:[row], files: [file]})
-                console.log("3 "+ card_value)
-                return(card_value)
-            });
-        }
-        
-        module.exports = {
-            data: new SlashCommandBuilder()
-            .setName('loot')
-            .setDescription("Choix de la lootbox à acheter."),
-            async execute(interaction) {
-                var member = interaction.member
-                //console.log(member.id)
-                const checksql = `SELECT ja_points FROM Player WHERE discord_id=${member.id}`
-                connection.query(checksql, function(err, row, fields) {
-                    console.log(row[0].ja_points)
-                })
-                const row = new MessageActionRow()
-                .addComponents(
-                    new MessageSelectMenu()
-                    .setCustomId('lootStore')
-                    .setPlaceholder('Choisis la lootbox à acheter (prix en ja_points, /inv)')
-                    .addOptions([
-                        {
-                            label: 'Lootbox Commune, Prix : {x} ja_points',
-                            description: 'Commun : 75 %, Rare : 25%',
-                            value: 'loot1',
-                        },
-                        {
-                            label: 'Lootbox Rare, Prix : {x} ja_points',
-                            description: 'Commun : 50 %, Rare : 35%, Epique : 15%',
-                            value: 'loot2',
-                        },
-                        {
-                            label: 'Lootbox Epique, Prix : {x} ja_points',
-                            description: 'Commun : 40 %, Rare : 30%, Epique : 20%, Légendaire : 10%',
-                            value: 'loot3',
-                        },
-                        {
-                            label: 'Lootbox Légendaire, Prix : {x} ja_points',
-                            description: 'Rare : 50 %, Epique : 30%, Légendaire : 20%',
-                            value: 'loot4',
-                        },
-                    ]),
-                    );
-                    interaction.reply({components : [row]})    
-                },
-                async drop(interaction) {
-                    var rarity;
-                    var error = 0;
-                    var randomtab = 0;
-                    var value = 0;
-                    var card_value = 0;
-                    var member = interaction.member
-                    //console.log(member)
-                    for (var i in lootbox){
-                        if(lootbox1[i] === interaction.values[0]){
-                            rarity = generateRarity(lootbox[i])
-                            //console.log("C'est EGAL" + lootbox1[i] + ' rarity :' + rarity);
-                        }
-                    }
-                    console.log(rarity, member.id)
-                    const checkup = `SELECT * FROM Cards join Player on Player.discord_id = ${member.id} WHERE id_rarity = ${rarity};`
-                    connection.query(checkup, function (err, rows, fields) {
-                        console.log(rows)
-                        if (err) throw err;
-                        randomtab = random(0, rows.length-1)
-                        value = rows[0].ja_points
-                        console.log("JA" + value)
-                        
-                        rarity = rows[randomtab].id_card
-                        //var insert = `INSERT INTO Has (id_player, id_card) VALUES (${rows[randomtab].id_player}, ${rows[randomtab].id_card});`
-                        var insert = `INSERT INTO Has (id_player, id_card) VALUES (3,843);`
-                        connection.query(insert, function (err1, rows1, fields) {
-                            if (err1) {
-                                console.log(err1.code)
-                                if (err1.code === "ER_DUP_ENTRY")
-                                error = 1
-                                console.log("CATCH DUP")
-                            };
-                            if (error == 0) {
-                                interaction.deferReply()
-                                interaction.deleteReply()
-                                connection.query(`SELECT * FROM Cards join Rarity on Cards.id_rarity = Rarity.id_rarity join Category on Cards.id_category = Category.id_category WHERE id_card = ${rarity} ;`, function (err2, rows2, fields) {
-                                    if (err2) throw err2;
-                                    const file = new MessageAttachment(`${rows2[0].image_cards}`);
-                                    const image = rows2[0].image_cards.split('/')
-                                    const embed = new MessageEmbed()
-                                    .setTitle(`${rows2[0].name_cards} reçu par ${member.user.username}!`)
-                                    .setColor(`${rows2[0].color_category}`)
-                                    .addField('Rareté :',`${rows2[0].name_rarity}`)
-                                    .addField('Prix :',`${rows2[0].price}`)
-                                    .addField('Catégorie :',`${rows2[0].name_category}`)
-                                    .setImage(`attachment://${image[4]}`)
-                                    .setFooter({ text: 'Yumeko à votre service !'})
-                                    interaction.channel.send({ embeds: [embed], files: [file], ephemeral:false})
-                                    
-                                });
-                            } else {
-                                console.log("1 " +card_value)
-                                card_value = doubleCard(card_value, member, rarity, interaction).parseInt()
-                                console.log("2 " +card_value)
-                            }
-                        })
-                    });   
-                    const collector = interaction.channel.createMessageComponentCollector({ time: 15000 });
-                    collector.on('collect', async i => {
-                        if (i.customId === 'trade') {
-                            var editsql = `UPDATE Player SET ja_points=${(value+card_value)} WHERE discord_id=${member.id};`
-                            console.log("aaaaa" + editsql)
-                            connection.query(editsql, function (err, rows, fields) {
-                                if (err) throw err;
-                            })
-                            interaction.editReply({ content: `Tu as maintenant : ${(value+card_value)} <:japoints:972907566579458058>`, embeds: [], files: [], components: []});;
-                        } else if (i.customId === "reload") {
-                        }
-                    })
+                    .setCustomId('loot1')
+                    .setLabel('Commune : {x}')
+                    .setStyle('SUCCESS')
+                    .setEmoji('<:japoints:972907566579458058>')
+            )
+            .addComponents(
+                new MessageButton()
+                    .setCustomId('loot2')
+                    .setLabel('Rare : {x}')
+                    .setStyle('SUCCESS')
+                    .setEmoji('<:japoints:972907566579458058>')
+            )
+            .addComponents(
+                new MessageButton()
+                    .setCustomId('loot3')
+                    .setLabel('Epique : {x}')
+                    .setStyle('SUCCESS')
+                    .setEmoji('<:japoints:972907566579458058>')
+            )
+            .addComponents(
+                new MessageButton()
+                    .setCustomId('loot4')
+                    .setLabel('Légendaire : {x}')
+                    .setStyle('SUCCESS')
+                    .setEmoji('<:japoints:972907566579458058>')
+            );
+            interaction.reply({embeds:[embed], components : [row]})
+        var rarity = 0 ;
+        var error = 0;
+        var randomtab = 0;
+        var value = 0;
+        var card_value = 0;
+        var card;
+        var member = interaction.member
+
+        const collector = interaction.channel.createMessageComponentCollector();
+        collector.on('collect', async i => {
+            for (var j in lootbox){
+                if(lootbox1[j] === i.customId){
+                    rarity = generateRarity(lootbox[j])
+                    console.log("C'est EGAL" + lootbox1[i] + ' rarity :' + rarity);
                 }
-            };
+            } 
+            const getRarityCard = `SELECT * FROM Cards join Player on Player.discord_id = ${member.id} WHERE id_rarity = ${rarity}`
+            connection.query(getRarityCard, function(err, rows, fields) {
+                if (err) throw err;
+                randomtab = random(0, rows.length-1)
+                value = rows[0].ja_points
+                console.log("JA" + value)
+            })
+            /* TODO
+            ** EDIT WHO RECIEVE CARD WITH i from collector and not interaction.*/
+
+            console.log(i.customId)
+            console.log("rareté " + rarity)
+
             
-            
+            console.log("rareté2 " + rarity)
+        })
+        
+        const checkup = `SELECT * FROM Cards join Player on Player.discord_id = ${member.id} WHERE id_rarity = ${rarity};`
+        connection.query(checkup, function (err, rows, fields) {
+                console.log(rows)
+                if (err) throw err;
+                randomtab = random(0, rows.length-1)
+                value = rows[0].ja_points
+                console.log("JA" + value)
+                
+                //rarity = rows[randomtab].id_card
+                //var insert = `INSERT INTO Has (id_player, id_card) VALUES (${rows[randomtab].id_player}, ${rows[randomtab].id_card});`
+                var insert = `INSERT INTO Has (id_player, id_card) VALUES (3,206);`
+                
+                connection.query(insert, function (err1, rows1, fields)  {
+                    if (err1) {
+                        console.log(err1.code)
+                        if (err1.code === "ER_DUP_ENTRY") {
+                            error = 1
+                            console.log("error " + error)
+                            console.log("CATCH DUP aaa")
+                        }
+                        //throw err1
+                    };
+                    
+                    console.log("error " + error)
+                    if (error == 0) {
+                        /*interaction.deferReply()
+                        interaction.deleteReply()*/
+                        connection.query(`SELECT * FROM Cards join Rarity on Cards.id_rarity = Rarity.id_rarity join Category on Cards.id_category = Category.id_category WHERE id_card = ${rarity} ;`, function (err2, rows2, fields) {
+                            if (err2) throw err2;
+                            const file = new MessageAttachment(`${rows2[0].image_cards}`);
+                            const image = rows2[0].image_cards.split('/')
+                            const embed = new MessageEmbed()
+                            .setTitle(`${rows2[0].name_cards} reçu par ${member.user.username}!`)
+                            .setColor(`${rows2[0].color_category}`)
+                            .addField('Rareté :',`${rows2[0].name_rarity}`)
+                            .addField('Prix :',`${rows2[0].price}`)
+                            .addField('Catégorie :',`${rows2[0].name_category}`)
+                            .setImage(`attachment://${image[4]}`)
+                            .setFooter({ text: 'Yumeko à votre service !'})
+                            interaction.followUp({ embeds: [embed], files: [file], ephemeral:false})
+                            
+                        });
+                    } else {
+                        console.log("1 " +card_value)
+                        card_value = doubleCard(card_value, member, rarity, interaction, value)
+                        console.log("2 " +card_value)
+                    }
+                })
+            }) 
+            /*
+            const collector = interaction.channel.createMessageComponentCollector({ time: 15000 });
+            collector.on('collect', async i => {
+                if (i.customId === 'trade') {
+                    var editsql = `UPDATE Player SET ja_points=${(value+card_value)} WHERE discord_id=${member.id};`
+                    console.log("aaaaa" + editsql)
+                    connection.query(editsql, function (err, rows, fields) {
+                        if (err) throw err;
+                    })
+                    interaction.editReply({ content: `Tu as maintenant : ${(value+card_value)} <:japoints:972907566579458058>`, embeds: [], files: [], components: []});;
+                } else if (i.customId === "reload") {
+                }
+            })*/
+}}

@@ -1,3 +1,23 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+DROP TABLE IF EXISTS Cards;
+
+CREATE TABLE Cards(
+    id_card INT AUTO_INCREMENT,
+    name_cards VARCHAR(100),
+    description_cards VARCHAR(256),
+    image_cards VARCHAR(128),
+    quantity SMALLINT,
+    price INT,
+    id_category INT,
+    id_rarity INT NOT NULL,
+    PRIMARY KEY(id_card),
+    FOREIGN KEY(id_category) REFERENCES Category(id_category),
+    FOREIGN KEY(id_rarity) REFERENCES Rarity(id_rarity)
+);
+
 INSERT INTO
     Cards (
         id_card,
@@ -72,59 +92,19 @@ VALUES
     ),
     (
         NULL,
-        "Cloud Strife",
-        "Cloud Strife, est le héros du jeu vidéo Final Fantasy VII et du film Final Fantasy VII Advent Children.",
-        "./images/CARDS/CULTURE/Cloud_Strife.jpg",
+        "Tonton Loup",
+        "Tonton Loup  est un des surveillants du serveur.",
+        "./images/CARDS/STAFF/TontonSTAFF.jpg",
         1,
-        250,
-        5,
-        5
-    ),
-    (
-        NULL,
-        "Kirby",
-        "Kirby est un personnage qui est une boule rose. On suit ses aventures dans le jeu du même nom. Ce dernier se bat contre différents types de menaces pour sauver Dream Land sur la planète lointaine Popstar.",
-        "./images/CARDS/CULTURE/Kirby.jpg",
-        1,
-        260,
-        5,
-        5
-    ),
-    (
-        NULL,
-        "Master Chief",
-        "Master Chief aussi connu sous le nom du Spartan John-117 est un personnage de fiction de l'univers d'Halo. Il est cité parmi les plus grands personnages du jeu vidéo.",
-        "./images/CARDS/CULTURE/Master_Chief.jpg",
-        1,
-        250,
-        5,
-        5
-    ),
-    (
-        NULL,
-        "Mario",
-        "Mario est un personnage de jeu vidéo devenu la mascotte de Nintendo, facilement reconnaissable à sa moustache, à sa salopette, à ses gants blancs et à sa casquette rouge marquée d'un M inscrit dans un cercle blanc.",
-        "./images/CARDS/CULTURE/Mario.jpg",
-        1,
-        500,
-        5,
-        5
-    ),
-    (
-        NULL,
-        "Link",
-        "Link est le protagoniste de la série The Legend of Zelda. Il a été créé en 1986 par Shigeru Miyamoto en tant que héros du premier jeu de la série, The Legend of Zelda.",
-        "./images/CARDS/CULTURE/Link.jpg",
-        1,
-        500,
-        5,
+        1000000,
+        15,
         5
     ),
     (
         NULL,
         "Waseda Université",
         "L'université Waseda, couramment abrege en Sōdai, est une université japonaise privee situee à Tokyo. Elle a ete fondee en 1882 par l'homme d'etat Ōkuma Shigenobu comme ecole specialisee, et a accede au statut d'université en 1920.",
-        "./images/CARDS/EDUCATION/Waseda Universite.jpg",
+        "./images/CARDS/EDUCATION/Waseda_Universite.jpg",
         1,
         250,
         4,
@@ -524,7 +504,7 @@ VALUES
         NULL,
         "Collège",
         "Le collège est l’appellation courante du premier cycle des etudes du second degre. Au Japon, c’est un enseignement de 3 ans, qui fait suite à l’ecole elementaire. La fourchette d'âge est de 13 ans à 16 ans.",
-        "./images/CARDS/EDUCATION/Collège.jpg",
+        "./images/CARDS/EDUCATION/College.jpg",
         1,
         100,
         4,
@@ -1594,7 +1574,7 @@ VALUES
         NULL,
         "Noeud",
         "Voici l'origami d'un nœud.",
-        "./images/CARDS/ORIGAMIS/Nœud.jpg",
+        "./images/CARDS/ORIGAMIS/Noeud.jpg",
         2,
         100,
         3,
@@ -1754,7 +1734,7 @@ VALUES
         NULL,
         "Tanya Degurechaff",
         "Tanya von Degurechaff est la principale protagoniste du light novel/anime Youjo Senki : Saga of Tanya the Evil..",
-        "./images/CARDS/CULTURE/Tanya Degurechaff.jpg",
+        "./images/CARDS/CULTURE/Tanya_Degurechaff.jpg",
         1,
         250,
         5,
@@ -2214,7 +2194,7 @@ VALUES
         NULL,
         "Onoda Sakimichi",
         "Onoda Sakamichi est le protagoniste principal du manga/anime Yowamushi Pedal..",
-        "./images/CARDS/CULTURE/Onoda_Sakimichi.jpg",
+        "./images/CARDS/CULTURE/Onoda_Sakamichi.jpg",
         1,
         100,
         5,
@@ -3694,7 +3674,7 @@ VALUES
         NULL,
         "Matsumara_Yoshifumi",
         "Matsumara Yoshifumi est un homme politique japonais du Parti libéral démocrate, membre de la Chambre des conseillers de la Diète (assemblée législative nationale). .",
-        "./images/CARDS/POLITIQUE/Matsumara_Yoshifumi.jpg",
+        "./images/CARDS/POLITIQUE/Matsumura_Yoshifumi.jpg",
         1,
         100,
         7,
@@ -4213,12 +4193,12 @@ VALUES
     (
         NULL,
         "Kobou Daishi",
-        "Kōbō-Daishi est le saint fondateur de l'école bouddhiste Shingon il est aussi une figure marquante de l'histoire du Japon : son esprit universel a fortement influencé la culture et la civilisation japonaise..",
-		"./images/CARDS/PERSONNAGES_HISTORIQUES/Kobou_Daishi.jpg",
+        "Kōbō-Daishi est le saint fondateur de l'école bouddhiste Shingon, il est aussi une figure marquante de l'histoire du Japon : son esprit universel a fortement influencé la culture et la civilisation japonaise..",
+        "./images/CARDS/PERSONNAGES_HISTORIQUES/Kobou_Daishi.jpg",
         1,
         250,
         10,
-		2
+        2
     ),
     (
         NULL,
@@ -4358,5 +4338,625 @@ VALUES
         1,
         250,
         10,
+        2
+    ),
+    (
+        NULL,
+        "Asakusa Line",
+        "La ligne Toei Asakusa est une ligne de métro à Tokyo au Japon gérée par le Bureau des Transports de la Métropole de Tokyo. Elle relie la station de Nishi-Magome à celle d'Oshiage..",
+        "./images/CARDS/TRANSPORTS/Asakusa_Line.jpg",
+        1,
+        100,
+        14,
+        1
+    ),
+    (
+        NULL,
+        "Autoroute Chuo",
+        "L'autoroute Chūō est une voie rapide à péage à chaussées séparées qui relie Tokyo à Nagoya. La Chūō suit un itinéraire passant par Suginami, Tokyo, Yamanashi, Nagano, Gifu et Aichi avant de se terminer à Nagoya, à la jonction avec l'autoroute Tōmei..",
+        "./images/CARDS/TRANSPORTS/Autoroute_Chuo.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Autoroute Tohoku",
+        "L'autoroute de Tōhoku est une autoroute japonaise. Elle appartient à la Japan Expressway Holding and Debt Repayment Agency et est exploitée par l'East Nippon Expressway Company..",
+        "./images/CARDS/TRANSPORTS/Autoroute_Tohoku.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Autoroute Hanshin",
+        "Les autoroutes Hanshin sont un réseau de 239,3 km d'autoroutes reliant Osaka, Kobe et Kyoto, au Japon. Exploitées par Hanshin Expressway Company, Limited, elles ont été ouvertes en 1962..",
+        "./images/CARDS/TRANSPORTS/Autoroute_Hanshin.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Autoroute Meishin",
+        "L'autoroute Meishin, longue de 193,9 km, est une autoroute à péage au Japon. Elle va d'une jonction avec l'autoroute Tōmei à Nagakute, Aichi, jusqu'à l'ouest de Nishinomiya, Hyōgo..",
+        "./images/CARDS/TRANSPORTS/Autoroute_Meishin.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Autoroute Tomei",
+        "L'autoroute Tōmei est une autoroute située sur l'île d'Honshū au Japon. Ouverte en 1968, son nom est un acronyme entre le kanji Tou, celui de Tōkyō et l'autre kanji, celui de Nagoya, qui sont les deux aires urbaines majeures reliées par l'autoroute. .",
+        "./images/CARDS/TRANSPORTS/Autoroute_Tomei.jpg",
+        1,
+        1000,
+        14,
+        4
+    ),
+    (
+        NULL,
+        "Canal Lac Biwa",
+        "Le canal du lac Biwa est une artère fluviale au Japon construite pendant l'ère Meiji pour transporter l'eau, le fret et les passagers du lac Biwa à la proche ville de Kyoto..",
+        "./images/CARDS/TRANSPORTS/Canal_Lac_Biwa.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Chitose Aeroport",
+        "L'aéroport de Shin-Chitose est situé à 5 kilomètres au sud-sud-est de la ville de Chitose, près de Sapporo, sous-préfecture d'Ishikari, dans la préfecture d'Hokkaido, au Japon. C'est le premier aéroport japonais à ouvrir 24 heures sur 24..",
+        "./images/CARDS/TRANSPORTS/Chitose_Aeroport.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Fukuoka Aeroport",
+        "L'aéroport de Fukuoka est le principal aéroport de l'île de Kyūshū au Japon. Il a la particularité d'être enclavé en plein centre-ville de Fukuoka, dans l'arrondissement de Hakata..",
+        "./images/CARDS/TRANSPORTS/Fukuoka_Aeroport.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Haneda Aeroport",
+        "L'aéroport international de Tokyo-Haneda est situé dans le quartier de Haneda, à 30 km au sud-ouest de Tokyo est l'un des deux aéroports internationaux desservant la région du Grand Tokyo, l'autre étant l'aéroport international de Narita..",
+        "./images/CARDS/TRANSPORTS/Haneda_Aeroport.jpg",
+        1,
+        1100,
+        14,
+        4
+    ),
+    (
+        NULL,
+        "Ibaraki Aeroport",
+        "L'aéroport d'Ibaraki est situé à 80 km au nord-est de Tōkyō, dans la préfecture d'Ibaraki..",
+        "./images/CARDS/TRANSPORTS/Ibaraki_Aeroport.jpg",
+        1,
+        100,
+        14,
+        1
+    ),
+    (
+        NULL,
+        "Kagoshima Aeroport",
+        "L'aéroport de Kagoshima est un aéroport japonais situé à Kirishima, dans la préfecture de Kagoshima. Il est, sur le plan de la fréquentation, le deuxième aéroport de Kyūshū après celui de Fukuoka..",
+        "./images/CARDS/TRANSPORTS/Kagoshima_Aeroport.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Kansai Aeroport",
+        "L'aéroport international du Kansai, est un aéroport international construit sur une île artificielle dans la baie d'Ōsaka, au sud de la ville d'Ōsaka au Japon. Il est en service depuis le 4 septembre 1994..",
+        "./images/CARDS/TRANSPORTS/Kansai_Aeroport.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Choufu Aeroport",
+        "L'aéroport de Choufu est un aéroport situé à Chōfu, dans la métropole de Tokyo, au Japon. Il est exploité par le Bureau du gouvernement métropolitain de Tokyo de Port and Harbor..",
+        "./images/CARDS/TRANSPORTS/Choufu_Aeroport.jpg",
+        1,
+        100,
+        14,
+        1
+    ),
+    (
+        NULL,
+        "Kumamoto Aeroport",
+        "L'aéroport de Kumamoto est un aéroport japonais qui dessert la ville de Kumamoto. Il est situé dans la ville de Mashiki, à une vingtaine de kilomètres de la gare de Kumamoto..",
+        "./images/CARDS/TRANSPORTS/Kumamoto_Aeroport.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Logo Chiyoda Line",
+        "La ligne Chiyoda est une ligne de métro à Tokyo au Japon gérée par la compagnie Tokyo Metro. Elle relie la station de Yoyogi-Uehara à la station de Kita-Ayase. Longue de 24 km, elle traverse Tokyo du sud-ouest au nord-est..",
+        "./images/CARDS/TRANSPORTS/Logo_Chiyoda_Line.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Logo Fukutoshin Line",
+        "La ligne Fukutoshin est une ligne de métro à Tokyo au Japon gérée par le réseau Tokyo Metro. Elle relie la station de Wakōshi à la station de Shibuya..",
+        "./images/CARDS/TRANSPORTS/Logo_Fukutoshin_Line.jpg",
+        1,
+        1000,
+        14,
+        4
+    ),
+    (
+        NULL,
+        "Logo Ginza Line",
+        "La ligne Ginza est une ligne de métro à Tokyo au Japon gérée par la compagnie Tokyo Metro. Elle relie la station de Shibuya à celle d'Asakusa. Longue de 14,3 km, elle traverse Tokyo du sud-ouest au nord-est..",
+        "./images/CARDS/TRANSPORTS/Logo_Ginza_Line.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Logo Hanzomon Line",
+        "La ligne Hanzōmon est une ligne de métro à Tokyo au Japon gérée par le réseau Tokyo Metro. Elle relie la station de Shibuya à la station d'Oshiage. Longue de 16,8 km, elle traverse Tokyo du sud-ouest à l'est..",
+        "./images/CARDS/TRANSPORTS/Logo_Hanzomon_Line.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Logo Hibiya Line",
+        "La ligne Hibiya est une ligne de métro à Tokyo au Japon gérée par le réseau Tokyo Metro. Elle relie la station de Naka-Meguro à la station de Kita-Senju..",
+        "./images/CARDS/TRANSPORTS/Logo_Hibiya_Line.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Logo Kyoto Karasuma Line",
+        "La ligne Karasuma est une ligne du métro de Kyoto, au Japon. Elle relie la station de Kokusaikaikan à celle de Takeda. Longue de 13,7 km, elle traverse Kyoto de nord au sud..",
+        "./images/CARDS/TRANSPORTS/Logo_Kyoto_Karasuma_Line.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Logo Kyoto Tozai Line",
+        "La ligne Tōzai est une ligne du métro de Kyoto, au Japon. Elle relie la station de Rokujizō à celle de Uzumasa Tenjingawa. Longue de 17,5 km, elle part de la ville d'Uji puis traverse Kyoto d'est en ouest..",
+        "./images/CARDS/TRANSPORTS/Logo_Kyoto_Tozai_Line.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Logo Marunouchi Line",
+        "La ligne Marunouchi est une ligne de métro à Tokyo au Japon gérée par le réseau Tokyo Metro. Elle relie la station d'Ikebukuro à la station d'Ogikubo. Longue de 27,4 km, elle traverse Tokyo du nord-ouest à l'ouest en passant par le centre..",
+        "./images/CARDS/TRANSPORTS/Logo_Marunouchi_Line.jpg",
+        1,
+        1100,
+        14,
+        4
+    ),
+    (
+        NULL,
+        "Logo Mita Line",
+        "La ligne Toei Mita est une ligne de métro à Tokyo au Japon gérée par le Bureau des Transports de la Métropole de Tokyo. Elle relie la station de Meguro à la station de Nishi-Takashimadaira..",
+        "./images/CARDS/TRANSPORTS/Logo_Mita_Line.jpg",
+        1,
+        100,
+        14,
+        1
+    ),
+    (
+        NULL,
+        "Logo Namboku Line",
+        "La ligne Namboku est une ligne du métro de Tokyo au Japon gérée par le réseau Tokyo Metro. Elle relie la station de Meguro à la station de Akabane-Iwabuchi. Longue de 21,3 km, elle traverse Tokyo du sud au nord..",
+        "./images/CARDS/TRANSPORTS/Logo_Namboku_Line.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Logo Oedo Line",
+        "La ligne Toei Ōedo est une ligne de métro à Tokyo au Japon gérée par le Bureau des Transports de la Métropole de Tokyo. Elle relie la station de Tochōmae à la station de Hikarigaoka..",
+        "./images/CARDS/TRANSPORTS/Logo_Oedo_Line.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Logo Shinjuku Line",
+        "La ligne Toei Shinjuku est une ligne de métro à Tokyo et Ichikawa au Japon gérée par le Bureau des Transports de la Métropole de Tokyo. Elle relie la station de Shinjuku à la station de Motoyawata..",
+        "./images/CARDS/TRANSPORTS/Logo_Shinjuku_Line.jpg",
+        1,
+        100,
+        14,
+        1
+    ),
+    (
+        NULL,
+        "Logo Tozai Line",
+        "La ligne Tozai est une ligne du métro de Sendai au Japon. Elle relie la station de Yagiyama-Dōbutsu-Kōen à celle d'Arai. Longue de 13,9 km, elle traverse Sendai d'est en ouest..",
+        "./images/CARDS/TRANSPORTS/Logo_Tozai_Line.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Logo Yurakucho Line",
+        "La ligne Yūrakuchō est une ligne de métro à Tokyo au Japon gérée par le réseau Tokyo Metro. Elle relie la station de Wakōshi à la station de Shin-Kiba..",
+        "./images/CARDS/TRANSPORTS/Logo_Yurakucho_Line.jpg",
+        1,
+        100,
+        14,
+        1
+    ),
+    (
+        NULL,
+        "Nagoya Aeroport",
+        "L'aéroport de Nagoya, est situé près de Nagoya, dans les villes de Komaki et Kasugai, dans la préfecture d'Aichi, au Japon..",
+        "./images/CARDS/TRANSPORTS/Nagoya_Aeroport.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Naha Aeroport",
+        "L'aéroport de Naha est le principal aéroport de l'île d'Okinawa situé à 4 km à l'ouest de la ville de Naha, la capitale et la principale ville de la préfecture d'Okinawa au Japon..",
+        "./images/CARDS/TRANSPORTS/Naha_Aeroport.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Narita Aeroport",
+        "L'aéroport de Narita est un aéroport international situé à Narita, dans la préfecture de Chiba au Japon. Il est l'un des deux principaux aéroports du Grand Tokyo, l'autre étant l'aéroport international de Tokyo-Haneda..",
+        "./images/CARDS/TRANSPORTS/Narita_Aeroport.jpg",
+        1,
+        1000,
+        14,
+        4
+    ),
+    (
+        NULL,
+        "New-Transit-Yurikamome",
+        "La New Transit Yurikamome, est une ligne de métro automatique sur pneus entièrement aérienne à Tokyo au Japon. Elle relie l'île de Toyosu au sud-est à la ligne Yamanote, pas loin du quartier de Ginza, en passant par la zone d'îles artificielles d'Odaiba..",
+        "./images/CARDS/TRANSPORTS/New-Transit-Yurikamome.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Nippori-Toneri-Liner",
+        "Le Nippori-Toneri Liner est un métro automatique sur pneus à Tokyo au Japon. Il relie la gare de Nippori dans l'arrondissement d'Arakawa à la gare de Minumadai-shinsuikōen dans l'arrondissement d'Adachi. .",
+        "./images/CARDS/TRANSPORTS/Nippori-Toneri-Liner.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Phare Sunosaki",
+        "Le phare de Sunosaki est un phare japonais situé au cap Sunosaki près de la ville de Tateyama dans la préfecture de Chiba au Japon. De forme cylindrique, il est en service depuis 1919 et a une hauteur de 18,5 m et une portée de 18,5 km..",
+        "./images/CARDS/TRANSPORTS/Phare_Sunosaki.jpg",
+        1,
+        100,
+        14,
+        1
+    ),
+    (
+        NULL,
+        "Pont Aioi",
+        "Le pont Aioi est un pont situé à Hiroshima au Japon qui enjambe le fleuve Ōta. Sa particularité réside dans le fait qu'il est constitué de deux tabliers perpendiculaires l'un par rapport à l'autre..",
+        "./images/CARDS/TRANSPORTS/Pont_Aioi.jpg",
+        1,
+        100,
+        14,
+        1
+    ),
+    (
+        NULL,
+        "Pont Chitose",
+        "Le pont Chitose enjambe le port intérieur de l'arrondissement Taisho à Osaka, au Japon..",
+        "./images/CARDS/TRANSPORTS/Pont_Chitose.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Pont circulaire Kawazu-Nanadaru",
+        "Le pont circulaire de Kawazu-Nanadaru, également appelé Viaduc de Nanadaru, est situé sur la route nationale 414, reliant Numazu à Shimoda, dans la péninsule japonaise d'Izu au sud-ouest de Tokyo..",
+        "./images/CARDS/TRANSPORTS/Pont_circulaire_Kawazu-Nanadaru.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Pont Baie Aomori",
+        "Le pont de la baie d'Aomori est un pont à haubans situé à Aomori, au Japon. Ouvert au public à partir de juillet 1992, il fait une longueur de 1 219 m..",
+        "./images/CARDS/TRANSPORTS/Pont_Baie_Aomori.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Pont Tokyo Wan Aqua-Line",
+        "La Tokyo Wan Aqua-Line est une route japonaise composée de tunnels sous-marins et de ponts qui relie la préfecture de Chiba à celle de Kanagawa à travers la baie de Tokyo..",
+        "./images/CARDS/TRANSPORTS/Pont_Tokyo_Wan_Aqua-Line.jpg",
+        1,
+        1000,
+        14,
+        4
+    ),
+    (
+        NULL,
+        "Pont Minato",
+        "Le pont de Minato est un pont cantilever en treillis à deux niveaux situé à Ōsaka au Japon, construit en 1974. Avec une portée principale de 510 m, c'est le troisième pont cantilever le plus grand au monde, derrière le Pont de Québec et le Pont du Forth..",
+        "./images/CARDS/TRANSPORTS/Pont_Minato.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Pont Nihonbashi",
+        "Le pont Nihonbashi était le point d'origine de cinq routes majeures construites à l'époque d'Edo au XVIIe siècle. Le pont porte toujours un signe indiquant « le point d'origine des routes du Japon »..",
+        "./images/CARDS/TRANSPORTS/Pont_Nihonbashi.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Pont Ryogoku",
+        "Le pont de Ryōgoku est un pont de Tokyo construit en 1659 sur la Sumida-gawa juste en amont de sa confluence avec la Kanda-gawa. Son nom, qui signifie « deux provinces », vient de ce qu'il relie Edo et la province de Shimōsa..",
+        "./images/CARDS/TRANSPORTS/Pont_Ryogoku.jpg",
+        1,
+        100,
+        14,
+        1
+    ),
+    (
+        NULL,
+        "Pont Eshima Ohashi",
+        "Le pont Eshima Ohashi est un pont qui relie Matsue, préfecture de Shimane et Sakaiminato dans la préfecture de Tottori au-dessus du lac Nakaumi, au Japon. Il a été construit de 1997 à 2004 et c'est le plus grand pont à cadre rigide du pays..",
+        "./images/CARDS/TRANSPORTS/Pont_Eshima_Ohashi.jpg",
+        1,
+        1000,
+        14,
+        4
+    ),
+    (
+        NULL,
+        "Pont Megane",
+        "Le pont Megane est un pont du Japon situé dans la ville de Nagasaki, sur l'île de Kyūshū..",
+        "./images/CARDS/TRANSPORTS/Pont_Megane.jpg",
+        1,
+        100,
+        14,
+        1
+    ),
+    (
+        NULL,
+        "Pont-Sanjo Ohashi",
+        "Sanjō Ōhashi est un pont à Kyoto, préfecture de Kyoto au Japon qui enjambe la rivière Kamo. Il est bien connu car il servait de station terminale pour le Nakasendō et le Tōkaidō..",
+        "./images/CARDS/TRANSPORTS/Pont_Sanjo_Ohashi.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Pont Shinkyo",
+        "Le Shinkyō est un pont du Japon situé dans la ville de Nikkō, sur l'île d'Honshū..",
+        "./images/CARDS/TRANSPORTS/Pont_Shinkyo.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Port Osaka",
+        "Le port d'Osaka est l'un des principaux ports de commerce au Japon, situé à Osaka au sein de la baie d'Osaka..",
+        "./images/CARDS/TRANSPORTS/Port_Osaka.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Port Kobe",
+        "Le port de Kobe est situé à Kobe au Japon. Il fut durement touché lors du séisme de Kobe en 1995..",
+        "./images/CARDS/TRANSPORTS/Port_Kobe.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Port Misaki",
+        "Le port de Misaki est un port spécialisé dans la pêche au thon, numéro 2 au Japon. Il est situé dans la ville de Miura, dans la Préfecture de Kanagawa, au Japon..",
+        "./images/CARDS/TRANSPORTS/Port_Misaki.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Port Nagoya",
+        "Le port de Nagoya est situé à Nagoya au Japon. Il possède un trafic annuel de 165 millions de tonnes de marchandises. Il est situé premier du Japon en tant que port de commerce..",
+        "./images/CARDS/TRANSPORTS/Port_Nagoya.jpg",
+        1,
+        1000,
+        14,
+        4
+    ),
+    (
+        NULL,
+        "Port Shimizu",
+        "Le port de Shimizu situé dans l'arrondissement Shimizu de la ville de Shizuoka dans la préfecture de Shizuoka au Japon est le neuvième port du pays. La vue sur le Mont Fuji en fait un lieu prisé des touristes..",
+        "./images/CARDS/TRANSPORTS/Port_Shimizu.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Port Tokyo",
+        "Le port de Tokyo est situé à Tokyo au Japon, dans la baie de Tokyo. Il possède un trafic annuel de 3,7 millions de EVP en 2007. Il est classé 7eme du japon en tant que port de commerce..",
+        "./images/CARDS/TRANSPORTS/Port_Tokyo.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Port Yokohama",
+        "Le port de Yokohama est l'infrastructure portuaire de la ville de Yokohama au japon. Il s'ouvre sur la baie de Tokyo. Ce port échange principalement avec l'Arabie saoudite, les États-Unis, la Chine et l'Australie. Il est 3ème du Japon..",
+        "./images/CARDS/TRANSPORTS/Port_Yokohama.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Port Yokosuka",
+        "Le port de Yokosuka se situe au sud du port de Yokohama dans la baie de Tokyo. Classé comme « port important » selon les lois portuaires du Japon, il est administré par la ville de Yokosuka..",
+        "./images/CARDS/TRANSPORTS/Port_Yokosuka.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Sky Gate Bridge R",
+        "Le Sky Gate Bridge R est un pont en treillis qui relie l'aéroport international du Kansai, bâti sur une île artificielle. Il comporte deux niveaux de circulation. Le niveau supérieur est une autoroute, et le niveau inférieur une ligne ferroviaire..",
+        "./images/CARDS/TRANSPORTS/Sky_Gate_Bridge_R.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Tokyo Gate Bridge",
+        "Le Tokyo Gate Bridge, est un pont à poutres en porte-à-faux au-dessus de la baie de Tokyo reliant le quartier de Wakasu dans l'arrondissement de Kōtō et le parc maritime de Jonanjima dans l'arrondissement d'Ōta à Tokyo..",
+        "./images/CARDS/TRANSPORTS/Tokyo_Gate_Bridge.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Tramway Hiroshima",
+        "Le tramway d'Hiroshima est le réseau de tramways qui dessert la ville d'Hiroshima, au Japon. Il comporte huit lignes commerciales. Il est exploité par la compagnie Hiroshima Electric Railway Co., Ltd..",
+        "./images/CARDS/TRANSPORTS/Tramway_Hiroshima.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Tramway Tokyo",
+        "La ligne Toden Arakawa, également appelée Tokyo Sakura Tram, est une ligne de tramway située à Tokyo. Cette ligne de 12,2 km de longueur, exploitée par la compagnie publique de transport Toei, dessert une partie de cette ville..",
+        "./images/CARDS/TRANSPORTS/Tramway_Tokyo.jpg",
+        1,
+        1000,
+        14,
+        4
+    ),
+    (
+        NULL,
+        "Tramway Osaka",
+        "Le tramway d'Osaka est un réseau de tramways exploité par la compagnie Hankai Tramway dans les villes d'Osaka et de Sakai au Japon. Il comporte deux lignes, totalisant 18,4 km de voies..",
+        "./images/CARDS/TRANSPORTS/Tramway_Osaka.jpg",
+        1,
+        250,
+        14,
+        2
+    ),
+    (
+        NULL,
+        "Tunnel Routier Kanmon",
+        "Le tunnel routier de Kanmon est un tunnel sous-marin du Japon qui permet à la Route Nationale 2 de traverser le détroit de Kanmon. Il a été ouvert à la circulation en 1958. Sa longueur moyenne est de 3 461 m, dont 780 m sous la mer..",
+        "./images/CARDS/TRANSPORTS/Tunnel_Routier_Kanmon.jpg",
+        1,
+        500,
+        14,
+        3
+    ),
+    (
+        NULL,
+        "Tunnel Sasago",
+        "Le tunnel de Sasago est un tunnel routier du Japon situé à l'ouest de Tokyo et de Sasago, dans la préfecture de Yamanashi, sur l'autoroute Chūō. D'une longueur de 4,7 kilomètres, il permet de traverser une montagne des Alpes japonaises..",
+        "./images/CARDS/TRANSPORTS/Tunnel_Sasago.jpg",
+        1,
+        250,
+        14,
         2
     );
