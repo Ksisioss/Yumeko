@@ -4,6 +4,8 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 DROP TABLE IF EXISTS Cards;
 
+SELECT * FROM Cards WHERE id_category= 1;
+
 CREATE TABLE Cards(
     id_card INT AUTO_INCREMENT,
     name_cards VARCHAR(100),

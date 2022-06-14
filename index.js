@@ -49,6 +49,16 @@ for (const file of contextMenus) {
     client.contextCommands.set(menu.data.name, menu);
 }
 
+const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+
+for (const file of eventFiles) {
+    const event = require(`./events/${file}`);
+    if (event.once) {
+        client.once(event.name, (...args) => event.execute(...args));
+    } else {
+        client.on(event.name, (...args) => event.execute(...args));
+    }
+}
 
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
