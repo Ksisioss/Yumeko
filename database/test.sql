@@ -3,9 +3,32 @@ SET FOREIGN_KEY_CHECKS = 0;
 SET FOREIGN_KEY_CHECKS = 1;
 
 DROP TABLE IF EXISTS Cards;
+DROP TABLE IF EXISTS Has;
 
 SELECT * FROM Cards WHERE id_category= 1;
 
+SELECT
+    *
+FROM
+    Has
+    JOIN Player ON Has.id_player = Player.id_player
+    JOIN Cards ON Has.id_cards = Cards.id_cards
+WHERE
+    Has.id_player = 3;
+
+SELECT
+    *
+FROM
+    Cards
+    JOIN Category ON Cards.id_category = Category.id_category
+WHERE
+    Cards.id_category = 16;
+SELECT * FROM Player WHERE name_player="<@243093183649677324>";
+SELECT * FROM Player WHERE discord_id=243093183649677324;
+SELECT * FROM Player WHERE discord_id=243093183649677324;
+--  Auto-generated SQL script #202206141724
+
+DELETE FROM s9212_Yumeko.Player WHERE id_player=6;
 CREATE TABLE Cards(
     id_card INT AUTO_INCREMENT,
     name_cards VARCHAR(100),
@@ -87,16 +110,6 @@ VALUES
         "Brenda",
         "Brenda est une des surveillantes du serveur.",
         "./images/CARDS/STAFF/BrendaSTAFF.jpg",
-        1,
-        1000000,
-        15,
-        5
-    ),
-    (
-        NULL,
-        "Tonton Loup",
-        "Tonton Loup  est un des surveillants du serveur.",
-        "./images/CARDS/STAFF/TontonSTAFF.jpg",
         1,
         1000000,
         15,
@@ -3524,7 +3537,7 @@ VALUES
     ),
     (
         NULL,
-        "Yoshida_Tadatomo",
+        "Yoshida Tadatomo",
         "Tadatomo Yoshida est un homme politique japonais. Il a été élu pour la première fois aux élections de la Chambre des conseillers en 2010. Il était auparavant membre de l'assemblée préfectorale dans la préfecture de Ōita..",
         "./images/CARDS/POLITIQUE/Yoshida_Tadatomo.jpg",
         1,
@@ -3534,7 +3547,7 @@ VALUES
     ),
     (
         NULL,
-        "Yamatani_Eriko",
+        "Yamatani Eriko",
         "Eriko Yamatani est une personnalité politique japonaise. Son nom d'usage est Yamatani son nom officiel est Eriko Ogawa..",
         "./images/CARDS/POLITIQUE/Yamatani_Eriko.jpg",
         1,
@@ -3544,7 +3557,7 @@ VALUES
     ),
     (
         NULL,
-        "Yamamoto_Junzo",
+        "Yamamoto Junzo",
         "Yamamoto Junzo est un homme politique japonais du Parti libéral démocrate, membre de la Chambre des conseillers de la Diète (assemblée législative nationale)..",
         "./images/CARDS/POLITIQUE/Yamamoto_Junzo.jpg",
         1,
@@ -3554,7 +3567,7 @@ VALUES
     ),
     (
         NULL,
-        "Yamada_Hiroshi",
+        "Yamada Hiroshi",
         "Yamada Hiroshi est un homme politique japonais. Il est un ancien membre de la Chambre des représentants et a été le premier secrétaire général du Parti pour les générations futures, un parti d'opposition formé en août 2014..",
         "./images/CARDS/POLITIQUE/Yamada_Hiroshi.jpg",
         1,
@@ -3564,7 +3577,7 @@ VALUES
     ),
     (
         NULL,
-        "Yakura_Katsuo",
+        "Yakura Katsuo",
         "Yakura Katsuo est un homme politique japonais. Il est membre de la Chambre des Conseillers..",
         "./images/CARDS/POLITIQUE/Yakura_Katsuo.jpg",
         1,
@@ -3574,7 +3587,7 @@ VALUES
     ),
     (
         NULL,
-        "Ueda_Kiyoshi",
+        "Ueda Kiyoshi",
         "Ueda Kiyoshi est un homme politique japonais actuellement membre de la Chambre des conseillers pour le district de Saitama après avoir remporté une élection partielle en 2019. Il a été gouverneur de la préfecture de Saitama de 2003 à 2019..",
         "./images/CARDS/POLITIQUE/Ueda_Kiyoshi.jpg",
         1,
@@ -3584,7 +3597,7 @@ VALUES
     ),
     (
         NULL,
-        "Toyoda_Toshiro",
+        "Toyoda Toshiro",
         "Toyoda Toshiro est un homme politique japonais. Il est membre de la chambre des conseillers et est du parti libéral-démocrate..",
         "./images/CARDS/POLITIQUE/Toyoda_Toshiro.jpg",
         1,
@@ -3594,7 +3607,7 @@ VALUES
     ),
     (
         NULL,
-        "Toshio_Ogawa",
+        "Toshio Ogawa",
         "Toshio Ogawa est un homme politique japonais du parti démocrate constitutionnel et un membre de la Chambre des conseillers de la Diète (assemblée législative nationale). Ogawa est un ancien ministre de la Justice..",
         "./images/CARDS/POLITIQUE/Toshio_Ogawa.jpg",
         1,
@@ -3604,7 +3617,7 @@ VALUES
     ),
     (
         NULL,
-        "Tokushige_Masayuki",
+        "Tokushige Masayuki",
         "Tokushige Masayuki est un membre de la Chambre des conseillers et est du parti libéral-démocrate..",
         "./images/CARDS/POLITIQUE/Tokushige_Masayuki.jpg",
         1,
@@ -3614,7 +3627,7 @@ VALUES
     ),
     (
         NULL,
-        "Tokunaga_Eri",
+        "Tokunaga Eri",
         "Tokunaga Eri est une femme politique japonaise et ancienne journaliste de télévision du Parti démocratique du Japon. Elle est actuellement membre de la Chambre des conseillers pour le district At-large d'Hokkaido..",
         "./images/CARDS/POLITIQUE/Tokunaga_Eri.jpg",
         1,
@@ -3624,7 +3637,7 @@ VALUES
     ),
     (
         NULL,
-        "Tadayoshi_Ichida",
+        "Tadayoshi Ichida",
         "Tadayoshi Ichida est un homme politique japonais, membre de la Chambre des conseillers du Parti communiste japonais. Depuis le congrès de 2000, il est également secrétaire général du parti..",
         "./images/CARDS/POLITIQUE/Tadayoshi_Ichida.jpg",
         1,
@@ -3634,7 +3647,7 @@ VALUES
     ),
     (
         NULL,
-        "Santo_Akiko",
+        "Santo Akiko",
         "Santo Akiko est une femme politique japonais qui occupe le poste de Présidente de la Chambre des Conseillers du Japon. Membre du Parti libéral démocrate, elle était auparavant vice-présidente de la Chambre des conseillers..",
         "./images/CARDS/POLITIQUE/Santo_Akiko.jpg",
         1,
@@ -3644,7 +3657,7 @@ VALUES
     ),
     (
         NULL,
-        "Saito_Yoshitaka",
+        "Saito Yoshitaka",
         "Saito Yoshitaka est un homme politique japonais qui siège à la Chambre des conseillers du Japon depuis 2010. Il représente le district d'Aichi at-large et est membre du Parti démocratique du Japon..",
         "./images/CARDS/POLITIQUE/Saito_Yoshitaka.jpg",
         1,
@@ -3654,7 +3667,7 @@ VALUES
     ),
     (
         NULL,
-        "Muroi_Kunihiko",
+        "Muroi Kunihiko",
         "Muroi Kunihiko est un homme politique japonais du parti Initiatives d'Osaka, membre de la Chambre des conseillers à la Diète (assemblée législative nationale)..",
         "./images/CARDS/POLITIQUE/Muroi_Kunihiko.jpg",
         1,
@@ -3664,7 +3677,7 @@ VALUES
     ),
     (
         NULL,
-        "Motoe_Taichirou",
+        "Motoe Taichirou",
         "Motoe Taichirou est un homme politique japonais et membre de la Chambre des conseillers. C'est aussi un avocat..",
         "./images/CARDS/POLITIQUE/Motoe_Taichirou.jpg",
         1,
@@ -3674,8 +3687,8 @@ VALUES
     ),
     (
         NULL,
-        "Matsumara_Yoshifumi",
-        "Matsumara Yoshifumi est un homme politique japonais du Parti libéral démocrate, membre de la Chambre des conseillers de la Diète (assemblée législative nationale). .",
+        "Matsumura Yoshifumi",
+        "Matsumura Yoshifumi est un homme politique japonais du Parti libéral démocrate, membre de la Chambre des conseillers de la Diète (assemblée législative nationale). .",
         "./images/CARDS/POLITIQUE/Matsumura_Yoshifumi.jpg",
         1,
         100,
@@ -3684,7 +3697,7 @@ VALUES
     ),
     (
         NULL,
-        "Katsuei_Hirasawa",
+        "Katsuei Hirasawa",
         "Katsuei Hirasawa est un homme politique japonais qui a occupé le poste de ministre de la reconstruction dans le cabinet de Yoshihide Suga. Membre de la Chambre des représentants, Hirasawa est membre du Parti libéral démocrate..",
         "./images/CARDS/POLITIQUE/Katsuei_Hirasawa.jpg",
         1,
@@ -3694,7 +3707,7 @@ VALUES
     ),
     (
         NULL,
-        "Ishibashi_Michihiro",
+        "Ishibashi Michihiro",
         "ishibashi Michihiro est un homme politique japonais du Parti démocratique constitutionnel et un ancien dirigeant syndical. Il est actuellement membre de la Chambre des conseillers, ayant été élu sur la liste de la représentation nationale en 2010..",
         "./images/CARDS/POLITIQUE/Ishibashi_Michihiro.jpg",
         1,
@@ -3704,7 +3717,7 @@ VALUES
     ),
     (
         NULL,
-        "Hiraki_Daisaku",
+        "Hiraki Daisaku",
         "Hiraki Daisaku est un homme politique japonais. Il est membre de la Chambre des conseillers depuis 2013, représentant le parti Komeito..",
         "./images/CARDS/POLITIQUE/Hiraki_Daisaku.jpg",
         1,
@@ -3714,7 +3727,7 @@ VALUES
     ),
     (
         NULL,
-        "Hasegawa_Gaku",
+        "Hasegawa Gaku",
         "Hasegawa Gaku est un membre de la Chambre des conseillers du Japon, originaire de Hokkaido. Il appartient au Parti libéral démocrate..",
         "./images/CARDS/POLITIQUE/Hasegawa_Gaku.jpg",
         1,
@@ -3724,7 +3737,7 @@ VALUES
     ),
     (
         NULL,
-        "Fukuoka_Takamaro",
+        "Fukuoka Takamaro",
         "Fukuoka Takamaro est un homme politique japonais du Parti libéral démocrate, membre de la Chambre des représentants à la Diète (assemblée législative nationale). .",
         "./images/CARDS/POLITIQUE/Fukuoka_Takamaro.jpg",
         1,
@@ -3734,7 +3747,7 @@ VALUES
     ),
     (
         NULL,
-        "Chambre_des_conseillers",
+        "Chambre des conseillers",
         "La Chambre des conseillers est la chambre haute de la Diète du Japon. Elle détient le pouvoir législatif concurremment avec la Chambre des représentants. Il y a 245 conseillers où chacun à un mandat de 6 ans..",
         "./images/CARDS/POLITIQUE/Chambre_des_conseillers.jpg",
         1,
@@ -3744,7 +3757,7 @@ VALUES
     ),
     (
         NULL,
-        "Baba_Seishi",
+        "Baba Seishi",
         "Baba Seishi est un homme politique japonais du Parti libéral démocrate, membre de la Chambre des conseillers de la Diète (assemblée législative nationale)..",
         "./images/CARDS/POLITIQUE/Baba_Seishi.jpg",
         1,
@@ -3754,7 +3767,7 @@ VALUES
     ),
     (
         NULL,
-        "Akiko_Kurabayashi",
+        "Akiko Kurabayashi",
         "Akiko Kurabayashi est une infirmière et femme politique japonaise, membre du Parti communiste japonais..",
         "./images/CARDS/POLITIQUE/Akiko_Kurabayashi.jpg",
         1,
@@ -4349,7 +4362,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Asakusa_Line.jpg",
         1,
         100,
-        14,
+        1,
         1
     ),
     (
@@ -4359,7 +4372,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Autoroute_Chuo.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4369,7 +4382,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Autoroute_Tohoku.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4379,7 +4392,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Autoroute_Hanshin.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4389,7 +4402,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Autoroute_Meishin.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4399,7 +4412,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Autoroute_Tomei.jpg",
         1,
         1000,
-        14,
+        1,
         4
     ),
     (
@@ -4409,7 +4422,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Canal_Lac_Biwa.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4419,7 +4432,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Chitose_Aeroport.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4429,7 +4442,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Fukuoka_Aeroport.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4439,7 +4452,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Haneda_Aeroport.jpg",
         1,
         1100,
-        14,
+        1,
         4
     ),
     (
@@ -4449,7 +4462,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Ibaraki_Aeroport.jpg",
         1,
         100,
-        14,
+        1,
         1
     ),
     (
@@ -4459,7 +4472,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Kagoshima_Aeroport.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4469,7 +4482,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Kansai_Aeroport.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4479,7 +4492,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Choufu_Aeroport.jpg",
         1,
         100,
-        14,
+        1,
         1
     ),
     (
@@ -4489,7 +4502,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Kumamoto_Aeroport.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4499,7 +4512,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Logo_Chiyoda_Line.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4509,17 +4522,17 @@ VALUES
         "./images/CARDS/TRANSPORTS/Logo_Fukutoshin_Line.jpg",
         1,
         1000,
-        14,
+        1,
         4
     ),
     (
         NULL,
         "Logo Ginza Line",
-        "La ligne Ginza est une ligne de métro à Tokyo au Japon gérée par la compagnie Tokyo Metro. Elle relie la station de Shibuya à celle d'Asakusa. Longue de 14,3 km, elle traverse Tokyo du sud-ouest au nord-est..",
+        "La ligne Ginza est une ligne de métro à Tokyo au Japon gérée par la compagnie Tokyo Metro. Elle relie la station de Shibuya à celle d'Asakusa. Longue de 1,3 km, elle traverse Tokyo du sud-ouest au nord-est..",
         "./images/CARDS/TRANSPORTS/Logo_Ginza_Line.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4529,7 +4542,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Logo_Hanzomon_Line.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4539,7 +4552,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Logo_Hibiya_Line.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4549,7 +4562,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Logo_Kyoto_Karasuma_Line.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4559,7 +4572,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Logo_Kyoto_Tozai_Line.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4569,7 +4582,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Logo_Marunouchi_Line.jpg",
         1,
         1100,
-        14,
+        1,
         4
     ),
     (
@@ -4579,7 +4592,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Logo_Mita_Line.jpg",
         1,
         100,
-        14,
+        1,
         1
     ),
     (
@@ -4589,7 +4602,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Logo_Namboku_Line.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4599,7 +4612,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Logo_Oedo_Line.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4609,7 +4622,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Logo_Shinjuku_Line.jpg",
         1,
         100,
-        14,
+        1,
         1
     ),
     (
@@ -4619,7 +4632,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Logo_Tozai_Line.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4629,7 +4642,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Logo_Yurakucho_Line.jpg",
         1,
         100,
-        14,
+        1,
         1
     ),
     (
@@ -4639,7 +4652,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Nagoya_Aeroport.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4649,7 +4662,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Naha_Aeroport.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4659,7 +4672,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Narita_Aeroport.jpg",
         1,
         1000,
-        14,
+        1,
         4
     ),
     (
@@ -4669,7 +4682,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/New-Transit-Yurikamome.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4679,7 +4692,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Nippori-Toneri-Liner.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4689,7 +4702,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Phare_Sunosaki.jpg",
         1,
         100,
-        14,
+        1,
         1
     ),
     (
@@ -4699,7 +4712,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Pont_Aioi.jpg",
         1,
         100,
-        14,
+        1,
         1
     ),
     (
@@ -4709,17 +4722,17 @@ VALUES
         "./images/CARDS/TRANSPORTS/Pont_Chitose.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
         NULL,
         "Pont circulaire Kawazu-Nanadaru",
-        "Le pont circulaire de Kawazu-Nanadaru, également appelé Viaduc de Nanadaru, est situé sur la route nationale 414, reliant Numazu à Shimoda, dans la péninsule japonaise d'Izu au sud-ouest de Tokyo..",
+        "Le pont circulaire de Kawazu-Nanadaru, également appelé Viaduc de Nanadaru, est situé sur la route nationale 41, reliant Numazu à Shimoda, dans la péninsule japonaise d'Izu au sud-ouest de Tokyo..",
         "./images/CARDS/TRANSPORTS/Pont_circulaire_Kawazu-Nanadaru.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4729,7 +4742,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Pont_Baie_Aomori.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4739,7 +4752,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Pont_Tokyo_Wan_Aqua-Line.jpg",
         1,
         1000,
-        14,
+        1,
         4
     ),
     (
@@ -4749,7 +4762,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Pont_Minato.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4759,7 +4772,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Pont_Nihonbashi.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4769,7 +4782,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Pont_Ryogoku.jpg",
         1,
         100,
-        14,
+        1,
         1
     ),
     (
@@ -4779,7 +4792,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Pont_Eshima_Ohashi.jpg",
         1,
         1000,
-        14,
+        1,
         4
     ),
     (
@@ -4789,17 +4802,17 @@ VALUES
         "./images/CARDS/TRANSPORTS/Pont_Megane.jpg",
         1,
         100,
-        14,
+        1,
         1
     ),
     (
         NULL,
-        "Pont-Sanjo Ohashi",
+        "Pont Sanjo Ohashi",
         "Sanjō Ōhashi est un pont à Kyoto, préfecture de Kyoto au Japon qui enjambe la rivière Kamo. Il est bien connu car il servait de station terminale pour le Nakasendō et le Tōkaidō..",
         "./images/CARDS/TRANSPORTS/Pont_Sanjo_Ohashi.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4809,7 +4822,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Pont_Shinkyo.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4819,7 +4832,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Port_Osaka.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4829,7 +4842,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Port_Kobe.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4839,7 +4852,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Port_Misaki.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4849,7 +4862,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Port_Nagoya.jpg",
         1,
         1000,
-        14,
+        1,
         4
     ),
     (
@@ -4859,7 +4872,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Port_Shimizu.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4869,7 +4882,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Port_Tokyo.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4879,7 +4892,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Port_Yokohama.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4889,7 +4902,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Port_Yokosuka.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4899,7 +4912,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Sky_Gate_Bridge_R.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4909,7 +4922,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Tokyo_Gate_Bridge.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4919,7 +4932,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Tramway_Hiroshima.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4929,7 +4942,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Tramway_Tokyo.jpg",
         1,
         1000,
-        14,
+        1,
         4
     ),
     (
@@ -4939,7 +4952,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Tramway_Osaka.jpg",
         1,
         250,
-        14,
+        1,
         2
     ),
     (
@@ -4949,7 +4962,7 @@ VALUES
         "./images/CARDS/TRANSPORTS/Tunnel_Routier_Kanmon.jpg",
         1,
         500,
-        14,
+        1,
         3
     ),
     (
@@ -4959,6 +4972,6 @@ VALUES
         "./images/CARDS/TRANSPORTS/Tunnel_Sasago.jpg",
         1,
         250,
-        14,
+        1,
         2
     );

@@ -2,10 +2,10 @@
   "name": "yumekov13",
   "version": "1.0.0",
   "description": "Yumeko est un bot développé pour Japan Academia.",
-  "main": "bot.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon bot.js"
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "Ksisios",
@@ -20,6 +20,9 @@
     "mariadb": "^3.0.0",
     "mysql": "^2.18.1",
     "node-schedule": "^2.1.0",
+    "nodemon": "^2.0.20",
+    "pterosocket": "^1.0.6",
+    "readline": "^1.3.0",
     "ts-node": "^10.5.0",
     "typescript": "^4.5.5",
     "unofficial-jisho-api": "^2.3.0"

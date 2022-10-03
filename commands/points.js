@@ -22,14 +22,16 @@ module.exports = {
             .setDescription('La quantité à modifier')
             .setRequired(true)),
     async execute(interaction) {
+        // Récupération des différents paramètres
         const user = interaction.options.getMentionable('joueur');
         const edit = interaction.options.getString('edit');
         const qty = interaction.options.getInteger('quantite');
         var value = 0
 
-        const hasRole = interaction.member.roles.cache.some(r => r.id === "908059700640251918")
-        console.log("hasrole " + hasRole)
+        // Vérification du Role NEKO THIBAULT
+        const hasRole = interaction.member.roles.cache.some(r => r.id === "958718586699001926")
         if (hasRole ==true) {
+            // Vérification si le joueur existe
             const checkup = `SELECT * FROM Player WHERE discord_id = ${user.user.id};`
             connection.query(checkup, function (err, rows, fields) {
                 if (err) throw err;
@@ -37,7 +39,7 @@ module.exports = {
                     interaction.reply({ content: "Le joueur n'a pas été trouvé, il peut s'inscrire avec /register !"})
                 } else {
                     value = rows[0].ja_points
-                    console.log(value + " " + qty)
+                    // Prépare la nouvelle valeur
                     switch(edit){
                         case 'add':
                             value+=qty
@@ -55,12 +57,11 @@ module.exports = {
                             break;
                     }
                     status=1
-                    console.log("test" + edit + "aaaa" + value + "status" + status)
                 }
-                console.log("Status" + status)
+                // Ajout des points dans la base de donné et affichage
                 if (status === 1) {
                     var editsql = `UPDATE Player SET ja_points=${value} WHERE discord_id=${user.user.id};`
-                    console.log(editsql)
+                    console.log(`Points ${edit} with ${qty} for ${user.user.username} by ${interaction.member.user.username}`)
                     connection.query(editsql, function (err, rows2, fields) {
                         if (err) throw err;
                     })
@@ -71,12 +72,16 @@ module.exports = {
                             .setColor("#FFABD6")
                             .addField('Joueur :',`${rows3[0].name_player}`)
                             .addField('Points :',`${rows3[0].ja_points}`)
-                            .setFooter('Yumeko à votre service !')
+                            .setFooter({ text: 'Yumeko à votre service !'})
                         interaction.reply({ embeds: [embed]})
                     })
                 }
             })
-        } else
-            interaction.reply({ content: "Pas la perm abruti"});
+        } else {
+            // La personne ne possède pas le role
+            console.log(`Try using points on ${user.user.username} by ${interaction.member.user.username}`)
+            interaction.reply({ content: "Tu n'as pas la permission d'utiliser cette commande."})
+            return
+        }
     }
 };

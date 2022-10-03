@@ -20,23 +20,23 @@ module.exports = {
         .setDescription('Récupère tes ja_points quotidiens'),
         async execute(interaction) {
             var member = interaction.member
-            var value = random(10, 15)
+            var value = random(25, 75)
             const checkup = `SELECT * FROM Player WHERE discord_id = ${member.id};`
             const sql = `UPDATE Player SET ja_points = ja_points + ${value} , daily=TRUE WHERE discord_id = ${member.id}`;
             connection.query(checkup, function (err, rows1, fields) {
-                //console.log(rows1)
                 if (err) throw err;
                 if (rows1.length == 0) {
                     interaction.reply({ content: "Tu n'as pas été trouvé, tu peux t'inscrire avec /register !"})
                 } else {
+                    if (rows1[0].daily == true) {
+                        interaction.reply({ content: "Tu as déjà utilisé la commande aujourd'hui. Attends demain !"})
+                    } else
                     connection.query(sql, function (err, rows, fields) {
+                        console.log(`Daily by ${member.user.username}`)
                         interaction.reply({ content: `${value} points ajoutés. Solde actuel ${rows1[0].ja_points + value}`}) 
                     if (err) throw err;
                 });
                 }
             });
-
-
-            
         }
 };

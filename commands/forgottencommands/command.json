@@ -1,0 +1,36 @@
+{
+    "ON": [
+        "command",
+        "ping",
+        "search",
+        "loot",
+        "points",
+        "dc",
+        "inspect",
+        "register",
+        "daily",
+        "inventory",
+        "explain",
+        "disp"
+    ],
+    "OFF": [
+        "all",
+        "help"
+    ],
+    "ALL": [
+        "help",
+        "inspect",
+        "loot",
+        "ping",
+        "player",
+        "points",
+        "register",
+        "search",
+        "command",
+        "dc",
+        "disp",
+        "all",
+        "inventory",
+        "explain"
+    ]
+}

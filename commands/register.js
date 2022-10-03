@@ -1,8 +1,9 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageActionRow, MessageButton, MessageEmbed} = require('discord.js');
 const connection = require('../connectdb.js');
+const {ROLE_ADMIN} = require("../config.json")
 
-// Application du système de valeurs et de boutons de confirmation ou annulation
+// Enregistrement du joueur dans la BDD
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -13,28 +14,33 @@ module.exports = {
             .setDescription('Le joueur que tu souhaites !')
             .setRequired(false)),
     async execute(interaction) {
-            var status=0
-            var member = interaction.member
-            const hasRole = interaction.member.roles.cache.some(r => r.id === "908059700640251918")
-            if (hasRole ==true && interaction.options.getMentionable('joueur') != null)
-                member = interaction.options.getMentionable('joueur')
-            else if (hasRole == false && interaction.options.getMentionable('joueur') != null) {
-                interaction.reply({ content: "Pas la perm abruti"})
-                return
+        // Vérification si admin add ou self add
+        var status=0
+        var member = interaction.member
+        const hasRole = interaction.member.roles.cache.some(r => r.id === `${ROLE_ADMIN}`)
+        if (hasRole ==true && interaction.options.getMentionable('joueur') != null)
+            member = interaction.options.getMentionable('joueur')
+        else if (hasRole == false && interaction.options.getMentionable('joueur') != null) {
+            console.log(`Try registering ${member.user.username} by ${interaction.member.user.username}`)
+            interaction.reply({ content: "Tu n'as pas la permission d'enregistré quelqu'un d'autre."})
+            return
+        }
+        
+        // Vérification si le joueur est déjà présent et ajout
+        const checkup = `SELECT COUNT(*) as count FROM Player WHERE discord_id = ${member.id};`
+        const sql = `INSERT INTO Player (id_player, discord_id, name_player, placement, ja_points, daily) VALUES (NULL, "${member.id}", "<@${member.id}>", 0, 0, FALSE)`;
+        connection.query(checkup, function (_err, rows, _fields) {
+            if (rows[0].count == 0) {
+                status=1;
             }
-            const checkup = `SELECT COUNT(*) as count FROM Player WHERE discord_id = ${member.id};`
-            const sql = `INSERT INTO Player (id_player, discord_id, name_player, placement, ja_points, daily) VALUES (NULL, "${member.id}", "<@${member.id}>", 0, 0, FALSE)`;
-            connection.query(checkup, function (_err, rows, _fields) {
-                if (rows[0].count == 0) {
-                    status=1;
-                }
-                if (status == 1) {
-                    connection.query(sql, function (_err, _rows, _fields) {
-                        interaction.reply({ content: "Utilisateur: " + member.displayName + " ajouté ! (test avec l'id : " + `<@${member.id}>)`});
-                    });
-                } else {
-                    interaction.reply({content: "Tu es déjà enregistré !"})
-                }
-            });
+            if (status == 1) {
+                console.log(`Registering ${member.user.username} by ${interaction.member.user.username}`)
+                connection.query(sql, function (_err, _rows, _fields) {
+                    interaction.reply({ content: "Utilisateur: " + member.displayName + " ajouté ! (test avec l'id : " + `<@${member.id}>)`});
+                });
+            } else {
+                interaction.reply({content: "Tu es déjà enregistré !"})
+            }
+        });
     },
 };

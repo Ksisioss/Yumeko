@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageActionRow, MessageButton, MessageEmbed} = require('discord.js');
 const connection = require('../connectdb.js');
+const {ROLE_ADMIN} = require("../config.json")
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,8 +28,13 @@ module.exports = {
                     .addField('Points :',`${rows[0].ja_points} <:japoints:972907566579458058>`)
                     .setFooter({ text: 'Yumeko à votre service !'})
                     .setThumbnail(user.user.displayAvatarURL())
+                    const hasRole = interaction.member.roles.cache.some(r => r.id === `${ROLE_ADMIN}`)
+                    if (hasRole ==true) {
+                        embed.addField('ID :', `${rows[0].id_player}`)
+                    }
                     interaction.reply({ embeds: [embed]}) 
                 }
+                console.log(`Search ${user.user.username} by ${interaction.member.user.username}`)
             });
         },
     };

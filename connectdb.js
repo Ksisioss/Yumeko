@@ -6,7 +6,8 @@ var connection = mysql.createConnection({
     database: 's9212_Yumeko',
     port: '3306',
     user: USER,
-    password: PASSWORD
+    password: PASSWORD,
+    charset: 'utf8mb4'
 
 });
 
