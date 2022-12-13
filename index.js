@@ -64,6 +64,7 @@ function delay(time) {
 function correctDB() {
     console.log("CORRECTION")
     connection.query("SELECT * FROM Player;", function (_err, rows, _fields) {
+        console.log(rows)
         for (let i = 0; i < rows.length; i++) {
             //console.log(rows[i])
             rows[i].name_player = rows[i].name_player.replace('<', '')
@@ -146,5 +147,5 @@ function remove_all(guild) {
 }
 
 
-
+//correctDB()
 client.login(TOKEN)

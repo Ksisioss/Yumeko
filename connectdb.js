@@ -2,7 +2,7 @@ var mysql = require('mysql');
 var fs = require('fs');
 const { USER, PASSWORD} = require('./config.json')
 var connection = mysql.createConnection({
-    host: 'bdd2.adkynet.com',
+    host: 'mysql1.par1.adky.net',
     database: 's9212_Yumeko',
     port: '3306',
     user: USER,

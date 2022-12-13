@@ -27,6 +27,7 @@ ws.on('open', function () {
     get_new_login().then((data) => {
     console.log(`STARTED ${data}`)
     ws.send(`{"event":"auth","args":["${data.token}"]}`);
+    ws.send(`{"event":"set state","args":["start"]}`);
 })
     
 });

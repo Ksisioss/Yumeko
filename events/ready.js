@@ -16,11 +16,11 @@ function correctDB() {
             rows[i].name_player = rows[i].name_player.replace('>', '')
             rows[i].name_player = rows[i].name_player.replace('@', '')
             var user = client.users.cache.find(user => user.id === rows[i].discord_id)
-            console.log(`USER : ${user}`)
+            //console.log(`USER : ${user}`)
             if (user) {
-                console.log(user.username)
+                //console.log(user.username)
                 connection.query(`UPDATE Player SET stringed_name='${user.username}', avatar='${user.avatar}' WHERE discord_id=${rows[i].name_player};`, function (_err2, rows2, _fields) {
-                    console.log(_err2)
+                    //console.log(_err2)
                 })
             }
         }
