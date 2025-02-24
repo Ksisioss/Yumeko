@@ -13,13 +13,13 @@ var connection = mysql.createConnection({
 
 connection.connect();
 module.exports = connection;
-
 /*
 connection.query('SELECT * FROM Category', function (err, rows, fields) {
     if (err) throw err;
     console.log(rows);
 });
 var test = "Test"
+
 connection.query(`INSERT INTO Category (id_category, name_category) VALUES (NULL, "${test}")`, function (err, rows, fields) {
     if (err) throw err;
     //console.log(rows);

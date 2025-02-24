@@ -3,29 +3,8 @@ const { REST } = require('@discordjs/rest');
 const package = require('../package.json');
 const {TOKEN, GUILD_ID, NICK, ON, OFF, ALL} = require('../config.json');
 const { MessageEmbed, Interaction } = require('discord.js');
-const connection = require('../connectdb.js');
+// const connection = require('../connectdb.js');
 const {client} = require('../index.js')
-
-
-function correctDB() {
-    console.log("CORRECTION")
-    connection.query("SELECT * FROM Player;", function (_err, rows, _fields) {
-        for (let i = 0; i < rows.length; i++) {
-            //console.log(rows[i])
-            rows[i].name_player = rows[i].name_player.replace('<', '')
-            rows[i].name_player = rows[i].name_player.replace('>', '')
-            rows[i].name_player = rows[i].name_player.replace('@', '')
-            var user = client.users.cache.find(user => user.id === rows[i].discord_id)
-            //console.log(`USER : ${user}`)
-            if (user) {
-                //console.log(user.username)
-                connection.query(`UPDATE Player SET stringed_name='${user.username}', avatar='${user.avatar}' WHERE discord_id=${rows[i].name_player};`, function (_err2, rows2, _fields) {
-                    //console.log(_err2)
-                })
-            }
-        }
-    })
-}
 
 module.exports = {
     name: 'ready',
@@ -54,15 +33,10 @@ module.exports = {
     Description: ${package.description}         Author: ${package.author}       Version: ${package.version}
     ${NICK} est online !`)
     // Registering the commands in the client
-    //client.application.commands.set([])
-    //console.log(client.guilds.fetch(GUILD_ID))
     const CLIENT_ID = client.user.id;
     const rest = new REST({ version: '9' }).setToken(TOKEN);
     const timestamp = new Date();
     var time = timestamp.getDay() + "/" + timestamp.getMonth() + "/" + timestamp.getFullYear() + "  "+ timestamp.getHours() + ":" + timestamp.getMinutes() + ":" + timestamp.getSeconds();
-    var result = "";
-    var embed = new MessageEmbed()
-        .setTitle('Liste des commandes actives');
     (async () => {
         try {
             await rest.put(
@@ -76,19 +50,62 @@ module.exports = {
             if (error) console.error(error);
         }
     })();
-    correctDB()
-    /*for (i = 0; i < ALL.length; i++) {
-        if(ON.some(item => item === ALL[i]))
-            result += "<:Approuv:782353191328940073> " + ALL[i] + " \n"
-        if(OFF.some(item => item === ALL[i]))
-            result += "<:Denied:782353207372283925> " + ALL[i] + " \n"
+    /*  
+    rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: [] })
+	.then(() => console.log('Successfully deleted all guild commands.'))
+	.catch(console.error);*/
+    // correctDB()
+    // everyone()
     }
-    embed.setDescription(result);
-    //client.user.setPresence({activities:[{name:"Aller au travail !"}], status:"online"})
-    client.user.setActivity("Gautier est mon esclave");// WATCHING, LISTENING ou pas type mais url:lien twitch pour STREAMING  
-    //client.user.setStatus('dnd'); //dnd, invisible, online, idle
-    //client.channels.cache.get("959359946804310067").send({content: `[${time}] \nDémarrage`, embeds: [embed]});
-    client.channels.cache.get("1018057731661381686").send({content:"/loot  "})
-    */
-    }
+}
+
+/**
+ * This function will add all missing plyaer to database
+ */
+function everyone() {
+    const guild = client.guilds.cache.find(guild =>guild.id == 473097441374109706)
+    //console.log(guild.members);
+    guild.members.fetch().then(members => {
+        console.log(`List of members in ${guild.name}:`);
+        members.forEach(member => {
+            let status = 0
+            const checkup = `SELECT COUNT(*) as count FROM Player WHERE discord_id = ${member.user.id};`
+            const sql = `INSERT INTO Player (id_player, discord_id, name_player, placement, ja_points, daily, avatar) VALUES (NULL, "${member.user.id}", "<@${member.user.id}>", 0, 0, FALSE, "${member.user.avatar}")`;
+            connection.query(checkup, function (_err, rows, _fields) {
+                if (rows[0].count == 0) {
+                    status=1;
+                }
+                if (status == 1) {
+                    connection.query(sql, function (err, rows, _fields) {
+                        console.log(`Registering ${member.user.username}`)
+                    });
+                } else {
+                    console.log(`Déjà mis`)
+                }
+            });
+        });
+    }).catch(console.error);
+}
+
+/**
+ * This function has the goal to correct any stuff in database
+ */
+function correctDB() {
+    console.log("CORRECTION")
+    connection.query("SELECT * FROM Player;", function (_err, rows, _fields) {
+        for (let i = 0; i < rows.length; i++) {
+            //console.log(rows[i])
+            rows[i].name_player = rows[i].name_player.replace('<', '')
+            rows[i].name_player = rows[i].name_player.replace('>', '')
+            rows[i].name_player = rows[i].name_player.replace('@', '')
+            var user = client.users.cache.find(user => user.id === rows[i].discord_id)
+            //console.log(`USER : ${user}`)
+            if (user) {
+                //console.log(user.username)
+                connection.query(`UPDATE Player SET username='${user.username}', avatar='${user.avatar}' WHERE discord_id=${rows[i].name_player};`, function (_err2, rows2, _fields) {
+                    //console.log(_err2)
+                })
+            }
+        }
+    })
 }

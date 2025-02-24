@@ -22,13 +22,13 @@ module.exports = {
             member = interaction.options.getMentionable('joueur')
         else if (hasRole == false && interaction.options.getMentionable('joueur') != null) {
             console.log(`Try registering ${member.user.username} by ${interaction.member.user.username}`)
-            interaction.reply({ content: "Tu n'as pas la permission d'enregistré quelqu'un d'autre."})
+            interaction.reply({ content: "Tu n'as pas la permission d'enregistrer quelqu'un d'autre."})
             return
         }
         
         // Vérification si le joueur est déjà présent et ajout
         const checkup = `SELECT COUNT(*) as count FROM Player WHERE discord_id = ${member.id};`
-        const sql = `INSERT INTO Player (id_player, discord_id, name_player, placement, ja_points, daily) VALUES (NULL, "${member.id}", "<@${member.id}>", 0, 0, FALSE)`;
+        const sql = `INSERT INTO Player (id_player, discord_id, name_player, placement, ja_points, daily, avatar) VALUES (NULL, "${member.id}", "<@${member.id}>", 0, 0, FALSE, ${member.avatar})`;
         connection.query(checkup, function (_err, rows, _fields) {
             if (rows[0].count == 0) {
                 status=1;

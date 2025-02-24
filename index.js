@@ -22,7 +22,7 @@ const {TOKEN, GUILD_ID, NICK, ALL, PRICE} = require('./config.json');
 const client = new Client({ intents: 32767 })
 module.exports = {client}
 const commands = [];
-const connection = require('./connectdb.js');
+// const connection = require('./connectdb.js');
 
 
 // Creating a collection for commands in client
@@ -64,7 +64,7 @@ function delay(time) {
 function correctDB() {
     console.log("CORRECTION")
     connection.query("SELECT * FROM Player;", function (_err, rows, _fields) {
-        console.log(rows)
+        //console.log(rows)
         for (let i = 0; i < rows.length; i++) {
             //console.log(rows[i])
             rows[i].name_player = rows[i].name_player.replace('<', '')
@@ -74,7 +74,7 @@ function correctDB() {
             console.log(user)
             if (user) {
                 console.log(user.username)
-                connection.query(`UPDATE Player SET stringed_name='${user.username}', avatar='${user.avatar}' WHERE discord_id=${rows[i].name_player};`, function (_err2, rows2, _fields) {
+                connection.query(`UPDATE Player SET username='${user.username}', avatar='${user.avatar}' WHERE discord_id=${rows[i].name_player};`, function (_err2, rows2, _fields) {
                     console.log(_err2)
                 })
             }
@@ -146,6 +146,9 @@ function remove_all(guild) {
     });
 }
 
+function everyone() {
+    const list = client.guilds.get("473097441374109706");
+    list.members.forEach(member => console.log(member.user.username)); 
+}
 
-//correctDB()
 client.login(TOKEN)

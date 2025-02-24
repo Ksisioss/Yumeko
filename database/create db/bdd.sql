@@ -3,8 +3,8 @@ DROP TABLE IF EXISTS Cards;
 DROP TABLE IF EXISTS Category;
 DROP TABLE IF EXISTS Rarity;
 DROP TABLE IF EXISTS Player;
-DROP TABLE IF EXISTS Embeds;
-DROP TABLE IF EXISTS Thumbnail;
+-- DROP TABLE IF EXISTS Embeds;
+-- DROP TABLE IF EXISTS Thumbnail;
 
 SET FOREIGN_KEY_CHECKS = 0;
 SET FOREIGN_KEY_CHECKS = 1;
@@ -17,6 +17,8 @@ CREATE TABLE Player(
    placement INT,
    ja_points BIGINT,
    daily BOOLEAN,
+   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY(id_player)
 );
 CREATE TABLE Rarity(
@@ -41,37 +43,51 @@ CREATE TABLE Cards(
    price INT,
    id_category INT,
    id_rarity INT NOT NULL,
+   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
    PRIMARY KEY(id_card),
    FOREIGN KEY(id_category) REFERENCES Category(id_category),
    FOREIGN KEY(id_rarity) REFERENCES Rarity(id_rarity)
 );
 
+UPDATE Player SET ja_points = CASE WHEN (ja_points - 99987000) >= 0 THEN (ja_points - 99987000) ELSE ja_points END WHERE discord_id = 239796769846853632;
+
+ALTER TABLE Cards
+ADD COLUMN created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+
 CREATE TABLE Has(
    id_player INT,
    id_card INT,
+   received TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY(id_player, id_card),
    FOREIGN KEY(id_player) REFERENCES Player(id_player),
    FOREIGN KEY(id_card) REFERENCES Cards(id_card)
 );
 
-CREATE TABLE Thumbnail(
-   id_thumbnail INT AUTO_INCREMENT,
-   url_thumbnail VARCHAR(256),
-   PRIMARY KEY(id_thumbnail)
+CREATE TABLE api_keys (
+   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   api_key VARCHAR(255) NOT NULL,
+   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE Embeds(
-   id_embed INT AUTO_INCREMENT,
-   command_embed VARCHAR(128),
-   title_embed VARCHAR(128),
-   color VARCHAR(50),
-   url_embed VARCHAR(256),
-   description_embed VARCHAR(2048),
-   id_thumbnail INT NOT NULL,
-   image_embed VARCHAR(256),
-   PRIMARY KEY(id_embed),
-   FOREIGN KEY(id_thumbnail) REFERENCES Thumbnail(id_thumbnail)
-);
+-- CREATE TABLE Thumbnail(
+--    id_thumbnail INT AUTO_INCREMENT,
+--    url_thumbnail VARCHAR(256),
+--    PRIMARY KEY(id_thumbnail)
+-- );
+
+-- CREATE TABLE Embeds(
+--    id_embed INT AUTO_INCREMENT,
+--    command_embed VARCHAR(128),
+--    title_embed VARCHAR(128),
+--    color VARCHAR(50),
+--    url_embed VARCHAR(256),
+--    description_embed VARCHAR(2048),
+--    id_thumbnail INT NOT NULL,
+--    image_embed VARCHAR(256),
+--    PRIMARY KEY(id_embed),
+--    FOREIGN KEY(id_thumbnail) REFERENCES Thumbnail(id_thumbnail)
+-- );
 
 
 
@@ -83,8 +99,8 @@ SELECT * FROM Cards;
 SELECT * FROM Has;
 SELECT * FROM Category;
 SELECT * FROM Rarity;
-SELECT * FROM Thumbnail;
-SELECT * FROM Embeds;
+-- SELECT * FROM Thumbnail;
+-- SELECT * FROM Embeds;
 
-ALTER TABLE Player AUTO_INCREMENT=1;
+-- ALTER TABLE Player AUTO_INCREMENT=1;
 

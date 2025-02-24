@@ -79,7 +79,7 @@ function createDouble(card_value) {
         )
         .addComponents(
             new MessageButton()
-            .setCustomId('reload')
+            .setCustomId('reload') // TODO : ADD RARITY IN IT to know in interaction
             .setLabel('Relance une fois')
             .setStyle('PRIMARY')
             .setEmoji('🔁'),
@@ -243,6 +243,137 @@ function loot(i, client) {
     }
 }
 
+function lootInteraction(i, client) {
+    i.deferReply()
+    let channel = client.channels.cache.get(`${CHANNEL_CARTES}`); 
+    member = i.member.user
+    if (i.customId == "loot1" || i.customId == "loot2" || i.customId == "loot3" || i.customId == "loot4") {
+        i.deleteReply();
+        rarity = getRarity(i)
+        const checksql = `SELECT * FROM Player WHERE discord_id=${member.id}`
+        const checkUserBalance = `UPDATE Player SET ja_points = ja_points - ? WHERE discord_id = ? AND ja_points >= ? RETURNING ja_points;`
+        connection.query(checkUserBalance, [PRICE[crateId - 1], member.id, PRICE[crateId - 1]], function (err, rows, field) {
+            if (err) {
+                console.log(err)
+            }
+            if (rows.length === 0) {
+                console.log(`Looting impossible for ${member.username}`)
+                i.channel.send({
+                    content: "Tu n'as pas assez de fonds."
+                })
+                return
+            } else {
+                const getCard = 'SELECT * FROM Cards c  \
+                JOIN Player on Player.discord_id = ?    \
+                JOIN Rarity on c.id_rarity = Rarity.id_rarity   \
+                JOIN Category on c.id_category = Category.id_category   \
+                WHERE c.id_rarity = ?   \
+                ORDER BY RAND()  \
+                LIMIT 1;'
+                // const getCard = `SELECT * FROM Cards JOIN Player on Player.discord_id = ? JOIN Rarity on Cards.id_rarity = Rarity.id_rarity JOIN Category on Cards.id_category = Category.id_category WHERE id_rarity = ? ORDER BY RAND() LIMIT 1;`
+                connection.query(getCard, [member.id, rarity], function (err, rows, fields) {
+                    if (err) {
+                        console.log(err)
+                    }
+                    const insert = `INSERT INTO Has (id_player, id_card) VALUES (?, ?);`
+                    connection.query(insert, [rows[0].id_player, rows[0].id_card], function (err1, rows1, fields) {
+                        if (err1) {
+                            if (err1.code === "ER_DUP_ENTRY") {
+                                console.log(`Double ${rows[0].id_card} with ${i.customId} for ${member.username}`);
+                            }
+                        }
+                        const file = new MessageAttachment(`${rows[0].image_cards}`);
+                        const embed = createEmbed(rows, member)
+                        card_value = rows[0].price
+                        if (error === 0) {
+                            console.log(`Loot card ${rowrowss2[0].id_card} with ${i.customId} for ${member.username}`)
+                            channel.send({
+                                embeds: [embed],
+                                files: [file],
+                                ephemeral: false
+                            })
+                            return
+                        } else {
+                            console.log(`Double ${rows[0].id_card} with ${i.customId} for ${member.username}`)
+                            embed.setTitle(`${member.username}, tu as déjà ${rows[0].name_cards}`)
+                            channel.send({
+                                embeds: [embed],
+                                files: [file],
+                                content: `<@${member.id}>`,
+                                components: [createDouble(card_value)],
+                                ephemeral: false
+                            })
+                        }
+                    })
+                })
+            }
+        })
+    }
+    if ((i.customId === 'cashback' || i.customId === 'reload') && i.message.content != `<@${i.member.id}>`) {
+        i.deleteReply()
+        channel.send({
+            content: `<@${i.member.id}> ce n'est pas ta carte !`
+        })
+        return
+    }
+    if (i.customId === 'cashback') {
+        card_value = parseInt(i.message.embeds[0].fields[1].value)
+        const cashBack = `UPDATE Player SET ja_points = ja_points + ? WHERE discord_id = ?;`*
+        connection.query(cashBack, [Math.floor(card_value/2), member.id], function (err, rows, fields) {
+            if (err) {
+                console.log(err)
+            }
+        })
+        channel.send({
+            content: `<@${member.id}> Tu as maintenant : ${(value+Math.floor(card_value/2))} <:japoints:972907566579458058>`,
+            embeds: [],
+            files: [],
+            components: []
+        });
+        i.deleteReply()
+        i.message.delete()
+        console.log(`Cashback for ${member.username}`)
+    } else if (i.customId === "reload") {
+        const getCard = 'SELECT * FROM Cards c JOIN Player on Player.discord_id = ? JOIN Rarity on c.id_rarity = Rarity.id_rarity JOIN Category on c.id_category = Category.id_category WHERE c.id_rarity = ? ORDER BY RAND() LIMIT 1;'
+        // const getCard = `SELECT * FROM Cards JOIN Player on Player.discord_id = ? JOIN Rarity on Cards.id_rarity = Rarity.id_rarity JOIN Category on Cards.id_category = Category.id_category WHERE id_rarity = ? ORDER BY RAND() LIMIT 1;`
+        connection.query(getCard, [member.id, rarity], function (err, rows, fields) {
+            if (err) {
+                console.log(err)
+            }
+            const insert = `INSERT INTO Has (id_player, id_card) VALUES (?, ?);`
+            connection.query(insert, [rows[0].id_player, rows[0].id_card], function (err1, rows1, fields) {
+                if (err1) {
+                    if (err1.code === "ER_DUP_ENTRY") {
+                        console.log(`Double ${rows[0].id_card} with ${i.customId} for ${member.username}`);
+                    }
+                }
+                card_value = rows[0].price
+                if (error === 0) {
+                    console.log(`Loot insert double card ${rows[0].id_card} with lootbox ${i.customId} for ${member.username}`)
+                    const file = new MessageAttachment(`${rows[0].image_cards}`);
+                    const embed = createEmbed(rows, member)
+                    channel.send({
+                        embeds: [embed],
+                        files: [file],
+                        ephemeral: false
+                    })
+                } else {
+                    channel.send({
+                        content: `${member.username}, tu as déjà ${rows4[0].name_cards}`,
+                        ephemeral: false
+                    })
+                }
+            })
+        })
+        i.deleteReply()
+        i.message.delete()
+    }
+}
+
 module.exports = {
     loot
 }
+
+/*
+ * TODO : Need to fix this many bdd access to avoid that shit too much 
+ */

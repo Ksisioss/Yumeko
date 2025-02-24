@@ -62,7 +62,6 @@ module.exports = {
         console.log(cat)
         var member = interaction.member.user
         if (cat != null) {
-
             connection.query(`SELECT * FROM Cards JOIN Category ON Cards.id_category = Category.id_category WHERE Cards.id_category = ${cat};`, function (err, rows, fields) {
                 var desc="";
                 var x = 0;
