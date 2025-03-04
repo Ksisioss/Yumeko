@@ -1,44 +1,44 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageActionRow, MessageButton, MessageEmbed} = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle} = require('discord.js');
 const connection = require('../connectdb.js');
 const wait = require('node:timers/promises').setTimeout;
 
 function pageButton(index, limit) {
     if (index === 0) {
-        const row = new MessageActionRow()
+        const row = new ActionRowBuilder()
         .addComponents(
-            new MessageButton()
+            new ButtonBuilder()
             .setCustomId('next')
             .setLabel(`Page Suivante ${index+1}`)
-            .setStyle('PRIMARY')
+            .setStyle(ButtonStyle.Primary)
             .setEmoji('▶'),
         );
         return (row)    
     }
     if (index === limit) {
-        const row = new MessageActionRow()
+        const row = new ActionRowBuilder()
         .addComponents(
-            new MessageButton()
+            new ButtonBuilder()
             .setCustomId('previous')
             .setLabel(`Page Précédente ${index-1}`)
-            .setStyle('PRIMARY')
+            .setStyle(ButtonStyle.Primary)
             .setEmoji('◀'),
         );
         return(row)
     }
-    const row = new MessageActionRow()
+    const row = new ActionRowBuilder()
         .addComponents(
-            new MessageButton()
+            new ButtonBuilder()
             .setCustomId('previous')
             .setLabel(`Page Précédente ${index-1}`)
-            .setStyle('PRIMARY')
+            .setStyle(ButtonStyle.Primary)
             .setEmoji('◀'),
         )
         .addComponents(
-            new MessageButton()
+            new ButtonBuilder()
             .setCustomId('next')
             .setLabel(`Page Suivante ${index+1}`)
-            .setStyle('PRIMARY')
+            .setStyle(ButtonStyle.Primary)
             .setEmoji('▶'),
         );
     return(row)
@@ -89,7 +89,7 @@ module.exports = {
                     }
                     var array = desc.split(";"); 
                     for (let i = 0; i < array.length; i++) {
-                        const embed = new MessageEmbed()
+                        const embed = new EmbedBuilder()
                         .setTitle(`**Inventaire de ${member.username}**`)
                         .setFooter({
                             text: `Yumeko à votre service !`
@@ -121,7 +121,7 @@ module.exports = {
                         }
                         array[i]=tmp
                     }
-                    const embed = new MessageEmbed()
+                    const embed = new EmbedBuilder()
                         .setTitle(`**Inventaire de ${member.username}**`)
                         .setFooter({
                             text: `Yumeko à votre service !`
@@ -134,9 +134,8 @@ module.exports = {
                         interaction.reply({embeds:[embed]})
                     const collector = interaction.channel.createMessageComponentCollector({});
                     collector.on('collect', async i => {
+                        i.deferUpdate()
                         if (i.customId == "next" || i.customId == "previous") {
-                            i.deferReply();
-                            i.deleteReply();
                             if (i.customId == "next") {
                                 console.log(array.length)
                                 index++;

@@ -2,11 +2,11 @@ const {
     SlashCommandBuilder
 } = require('@discordjs/builders');
 const {
-    MessageActionRow,
+    ActionRowBuilder,
     MessageSelectMenu,
-    MessageEmbed,
-    MessageAttachment,
-    MessageButton
+    EmbedBuilder,
+    ButtonStyle,
+    ButtonBuilder
 } = require('discord.js');
 const connection = require('../connectdb.js');
 const {PRICE, CHANNEL_LOOTBOX} = require('../config.json')
@@ -22,7 +22,7 @@ module.exports = {
             interaction.channel.send({content:"Wrong channel"})
             return
         }*/
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle(`**Lootbox**`)
             .setDescription(`**Commune :**
         Commun : 75 %, Rare : 25
@@ -40,40 +40,40 @@ module.exports = {
                 text: `Yumeko à votre service !`
             })
 
-        const row = new MessageActionRow()
+        const row = new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                 .setCustomId('loot1')
                 .setLabel(`Commune : ${PRICE[0]}`)
-                .setStyle('SUCCESS')
+                .setStyle(ButtonStyle.Success)
                 .setEmoji('<:japoints:972907566579458058>')
             )
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                 .setCustomId('loot2')
                 .setLabel(`Rare : ${PRICE[1]}`)
-                .setStyle('SUCCESS')
+                .setStyle(ButtonStyle.Success)
                 .setEmoji('<:japoints:972907566579458058>')
             )
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                 .setCustomId('loot3')
                 .setLabel(`Epique : ${PRICE[2]}`)
-                .setStyle('SUCCESS')
+                .setStyle(ButtonStyle.Success)
                 .setEmoji('<:japoints:972907566579458058>')
             )
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                 .setCustomId('loot4')
                 .setLabel(`Légendaire : ${PRICE[3]}`)
-                .setStyle('SUCCESS')
+                .setStyle(ButtonStyle.Success)
                 .setEmoji('<:japoints:972907566579458058>')
             );
-        interaction.deferReply()
-        interaction.deleteReply()
         client.channels.cache.get(`${CHANNEL_LOOTBOX}`).send({
             embeds: [embed],
             components: [row]
         })
+        //interaction.reply({content: "Les lootbox sont disponibles dans le channel <#987840073233989672>"})
+        //await interaction.deleteReply()
     }
 }

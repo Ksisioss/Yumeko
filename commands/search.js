@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageActionRow, MessageButton, MessageEmbed} = require('discord.js');
+const { MessageActionRow, MessageButton, EmbedBuilder} = require('discord.js');
 const connection = require('../connectdb.js');
-const {ROLE_ADMIN} = require("../config.json")
+const {ROLE_ADMIN, JA_POINTS} = require("../config.json")
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,13 +19,14 @@ module.exports = {
                 if (rows.length == 0) {
                     interaction.reply({ content: "Le joueur n'a pas été trouvé, il peut s'inscrire avec /register !"})
                 } else {
-                    const embed = new MessageEmbed()
+                    const embed = new EmbedBuilder()
                     .setTitle("Fiche de joueur")
                     .setColor("#FFABD6")
                     .setDescription(`Voici la fiche récapitulative du joueur`)
-                    .addField('Joueur :',`${rows[0].name_player}`)
-                    .addField('Rang :',`${rows[0].placement}`)
-                    .addField('Points :',`${rows[0].ja_points} <:japoints:972907566579458058>`)
+                    .addFields(
+                        {name:'Joueur :', value:`${rows[0].name_player}`},
+                        {name:'Rang :', value:`${rows[0].placement}`},
+                        {name:'Points :', value:`${rows[0].ja_points} <:japoints:${JA_POINTS}>`})
                     .setFooter({ text: 'Yumeko à votre service !'})
                     .setThumbnail(user.user.displayAvatarURL())
                     const hasRole = interaction.member.roles.cache.some(r => r.id === `${ROLE_ADMIN}`)

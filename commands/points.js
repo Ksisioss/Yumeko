@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageAttachment, MessageEmbed } = require('discord.js')
+const { MessageAttachment, EmbedBuilder } = require('discord.js')
 const connection = require('../connectdb.js');
 var status = 0
 
@@ -30,7 +30,7 @@ module.exports = {
 
         // Vérification du Role NEKO THIBAULT
         const hasRole = interaction.member.roles.cache.some(r => r.id === "958718586699001926")
-        if (hasRole ==true) {
+        if (hasRole ==false) {
             // Vérification si le joueur existe
             const checkup = `SELECT * FROM Player WHERE discord_id = ${user.user.id};`
             connection.query(checkup, function (err, rows, fields) {
@@ -67,11 +67,12 @@ module.exports = {
                     })
                     connection.query(checkup, function (err, rows3, fields) {
                         if (err) throw err;
-                        const embed = new MessageEmbed()
+                        const embed = new EmbedBuilder()
                             .setTitle("Solde mis à jour")
                             .setColor("#FFABD6")
-                            .addField('Joueur :',`${rows3[0].name_player}`)
-                            .addField('Points :',`${rows3[0].ja_points}`)
+                            .addFields(
+                                {name:'Joueur :', value:`${rows3[0].name_player}`},
+                                {name:'Points :', value:`${rows3[0].ja_points}`})
                             .setFooter({ text: 'Yumeko à votre service !'})
                         interaction.reply({ embeds: [embed]})
                     })

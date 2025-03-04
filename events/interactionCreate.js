@@ -11,7 +11,7 @@ module.exports = {
     once: false,
     async execute(interaction) {
         //console.log(interaction.customId)
-        if (interaction.isContextMenu()) {
+        /*if (interaction.isContextMenu()) {
             const cmd = interaction.client.contextCommands.get(interaction.commandName);
             if (!cmd) return;
             try {
@@ -23,7 +23,7 @@ module.exports = {
                     ephemeral: true
                 });
             }
-        }
+        }*/
         if (interaction.isButton()) {
             loot(interaction, client)
         }

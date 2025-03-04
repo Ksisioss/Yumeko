@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageActionRow, MessageAttachment, MessageEmbed} = require('discord.js');
+const { AttachmentBuilder, EmbedBuilder} = require('discord.js');
 const connection = require('../connectdb.js');
 const wait = require('node:timers/promises').setTimeout;
 
@@ -34,28 +34,27 @@ module.exports = {
         connection.query(fullsql, function (err, rows, fields) {
             if (rows.length == 0) {
                 interaction.channel.send({ content: "La carte n'as pas été trouvée."})
-                console.log(`Inspecting FAIL by ${interaction.member.user.username} on ${card}`)
+                console.log(`INSPECT FAIL : ${card} : ${interaction.member.user.username} `)
             } else {
-                console.log(rows[0])
                 if (err) throw err;
                 let x = 0
-                const file = new MessageAttachment(`${rows[x].image_cards}`);
+                const file = new AttachmentBuilder(`${rows[x].image_cards}`);
                 const image = rows[x].image_cards.split('/')
-                const embed = new MessageEmbed()
+                const embed = new EmbedBuilder()
                 .setTitle(`${rows[x].name_cards}`)
                 .setColor(`${rows[x].color_category}`)
                 .setDescription(`${rows[x].description_cards}`)
-                .addField('Prix :',`${rows[x].price}`)
-                .addField('Rareté :',`${rows[x].name_rarity}`)
-                .addField('Catégorie :',`${rows[x].name_category}`)
-                .addField('Demandé par :',`<@${interaction.user.id}>`)
+                .addFields(
+                    {name: 'Prix :', value: `${rows[x].price}`},
+                    {name: 'Rareté :', value: `${rows[x].name_rarity}`},
+                    {name: 'Catégorie :', value: `${rows[x].name_category}`},
+                    {name: 'Demandé par :', value: `<@${interaction.user.id}>`}
+                )
                 .setImage(`attachment://${image[4]}`)
                 .setFooter({ text: 'Yumeko à votre service !'})
                 interaction.channel.send({ embeds: [embed], files: [file], ephemeral:false}) 
-                console.log(`Inspecting SUCCESS ${rows[x].id_card} by ${interaction.member.user.username}`)
+                console.log(`INSPECT SUCCESS : ${rows[x].id_card} : ${interaction.member.user.username}`)
             }
         })
-        interaction.deferReply()
-        interaction.deleteReply()
     },
 };

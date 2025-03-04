@@ -21,22 +21,28 @@ module.exports = {
         async execute(interaction) {
             var member = interaction.member
             var value = random(25, 75)
-            const checkup = `SELECT * FROM Player WHERE discord_id = ${member.id};`
-            const sql = `UPDATE Player SET ja_points = ja_points + ${value} , daily=TRUE WHERE discord_id = ${member.id}`;
-            connection.query(checkup, function (err, rows1, fields) {
-                if (err) throw err;
-                if (rows1.length == 0) {
+            const sql = `UPDATE Player SET ja_points = ja_points + ? , daily=1 WHERE discord_id = ? AND daily=0;`;
+            const selectSql = `SELECT ja_points FROM Player WHERE discord_id = ?;`;
+            const params = [value, member.id];
+            console.log("DAILY by " + member.user.username);
+            connection.query(sql, params, function(err, rows, fields) {
+                if (rows.length == 0) {
                     interaction.reply({ content: "Tu n'as pas été trouvé, tu peux t'inscrire avec /register !"})
+                    console.log("DAILY : MISSING_USER");
+                    return
                 } else {
-                    if (rows1[0].daily == true) {
-                        interaction.reply({ content: "Tu as déjà utilisé la commande aujourd'hui. Attends demain !"})
-                    } else
-                    connection.query(sql, function (err, rows, fields) {
-                        console.log(`Daily by ${member.user.username}`)
-                        interaction.reply({ content: `${value} points ajoutés. Solde actuel ${rows1[0].ja_points + value}`}) 
-                    if (err) throw err;
-                });
+                    if (rows.affectedRows == 0) {
+                        interaction.reply({ content: "Tu as déjà récupéré tes points aujourd'hui !"})
+                        console.log("DAILY : ALREADY");
+                        return
+                    }
+                    connection.query(selectSql, [member.id], function(err, selectRows, fields) {
+                        if (err) throw err;
+                        console.log(`DAILY : SUCCESS`)
+                        interaction.reply({ content: `${value} points ajoutés. Solde actuel ${selectRows[0].ja_points}`});
+                        return
+                    });
                 }
-            });
+            })
         }
 };

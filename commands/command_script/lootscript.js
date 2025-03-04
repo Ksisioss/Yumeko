@@ -1,8 +1,9 @@
 const {
-    MessageActionRow,
-    MessageEmbed,
-    MessageAttachment,
-    MessageButton
+    ActionRowBuilder,
+    EmbedBuilder,
+    AttachmentBuilder,
+    ButtonBuilder,
+    ButtonStyle
 } = require('discord.js');
 const connection = require('../../connectdb.js');
 
@@ -55,12 +56,14 @@ function random(min, max) {
 
 function createEmbed(rows2, member) {
     const image = rows2[0].image_cards.split('/')
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
         .setTitle(`${rows2[0].name_cards} reçu par ${member.username}!`)
         .setColor(`${rows2[0].color_category}`)
-        .addField('Rareté :', `${rows2[0].name_rarity}`)
-        .addField('Prix :', `${rows2[0].price}`)
-        .addField('Catégorie :', `${rows2[0].name_category}`)
+        .addFields(
+            {name:'Rareté :', value:`${rows2[0].name_rarity}`},
+            {name:'Prix :', value:`${rows2[0].price}`},
+            {name:'Catégorie :', value:`${rows2[0].name_category}`}
+        )
         .setImage(`attachment://${image[4]}`)
         .setFooter({
             text: 'Yumeko à votre service !'
@@ -69,19 +72,19 @@ function createEmbed(rows2, member) {
 }
 
 function createDouble(card_value) {
-    const row = new MessageActionRow()
+    const row = new ActionRowBuilder()
         .addComponents(
-            new MessageButton()
+            new ButtonBuilder()
             .setCustomId('trade')
             .setLabel(`Récupère la moitié des points : ${ Math.floor(card_value/2)}`)
-            .setStyle('SUCCESS')
+            .setStyle(ButtonStyle.Success)
             .setEmoji('<:japoints:972907566579458058>'),
         )
         .addComponents(
-            new MessageButton()
+            new ButtonBuilder()
             .setCustomId('reload') // TODO : ADD RARITY IN IT to know in interaction
             .setLabel('Relance une fois')
-            .setStyle('PRIMARY')
+            .setStyle(ButtonStyle.Primary)
             .setEmoji('🔁'),
         );
     return (row)
@@ -110,12 +113,11 @@ function generateRarity(loottable) {
     }
 }
 
-function loot(i, client) {
+async function loot(i, client) {
     let channel = client.channels.cache.get(`${CHANNEL_CARTES}`); 
     member = i.member.user
     if (i.customId == "loot1" || i.customId == "loot2" || i.customId == "loot3" || i.customId == "loot4") {
-        i.deferReply();
-        i.deleteReply();
+        await i.deferReply();
         rarity = getRarity(i)
         const checksql = `SELECT * FROM Player WHERE discord_id=${member.id}`
         connection.query(checksql, function (err, rows, field) {
@@ -144,7 +146,7 @@ function loot(i, client) {
                         }
                         connection.query(`SELECT * FROM Cards join Rarity on Cards.id_rarity = Rarity.id_rarity join Category on Cards.id_category = Category.id_category WHERE id_card = ${rows[randomtab].id_card} ;`, function (err2, rows2, fields) {
                             if (err2) throw err2;
-                            const file = new MessageAttachment(`${rows2[0].image_cards}`);
+                            const file = new AttachmentBuilder(`${rows2[0].image_cards}`);
                             const embed = createEmbed(rows2, member)
                             card_value = rows2[0].price
                             if (error === 0) {
@@ -153,7 +155,11 @@ function loot(i, client) {
                                     embeds: [embed],
                                     files: [file],
                                     ephemeral: false
-                                })
+                                }).then((result) => {
+                                    i.deleteReply()
+                                }).catch((err) => {
+                                    
+                                });
                                 return
                             } else {
                                 console.log(`Double ${rows2[0].id_card} with ${i.customId} for ${member.username}`)
@@ -164,7 +170,13 @@ function loot(i, client) {
                                     content: `<@${member.id}>`,
                                     components: [createDouble(card_value)],
                                     ephemeral: false
-                                })
+                                }).then((result) => {
+                                    i.deleteReply()
+                                }).catch((err) => {
+                                    
+                                });
+                                
+                                return
                             }
                         })
                     })
@@ -173,7 +185,6 @@ function loot(i, client) {
         })
     }
     if ((i.customId === 'trade' || i.customId === 'reload') && i.message.content != `<@${i.member.id}>`) {
-        i.deferReply()
         i.deleteReply()
         channel.send({
             content: `<@${i.member.id}> ce n'est pas ta carte !`
@@ -182,6 +193,7 @@ function loot(i, client) {
     }
     //check wich user calls it 
     if (i.customId === 'trade') {
+        await i.deferReply()
         card_value = parseInt(i.message.embeds[0].fields[1].value)
         connection.query(`SELECT * FROM Player WHERE discord_id=${member.id}`, function (err, rows1 , fields) {
             if (err) throw err;
@@ -196,12 +208,12 @@ function loot(i, client) {
                 files: [],
                 components: []
             });;
-            i.deferReply()
             i.deleteReply()
             i.message.delete()
             console.log(`Trade for ${member.username}`)
         })
     } else if (i.customId === "reload") {
+        await i.deferReply()
         let test = {
             customId: "loot2"
         }
@@ -221,7 +233,7 @@ function loot(i, client) {
                 connection.query(`SELECT * FROM Cards join Rarity on Cards.id_rarity = Rarity.id_rarity join Category on Cards.id_category = Category.id_category WHERE id_card = ${rows[randomtab].id_card} ;`, function (err4, rows4, fields) {
                     if (error === 0) {
                         console.log(`Loot insert double card ${rows4[0].id_card} with lootbox ${i.customId} for ${member.username}`)
-                        const file = new MessageAttachment(`${rows4[0].image_cards}`);
+                        const file = new AttachmentBuilder(`${rows4[0].image_cards}`);
                         const embed = createEmbed(rows4, member)
                         channel.send({
                             embeds: [embed],
@@ -237,7 +249,6 @@ function loot(i, client) {
                 })
             })
         })
-        i.deferReply()
         i.deleteReply()
         i.message.delete()
     }
@@ -282,7 +293,7 @@ function lootInteraction(i, client) {
                                 console.log(`Double ${rows[0].id_card} with ${i.customId} for ${member.username}`);
                             }
                         }
-                        const file = new MessageAttachment(`${rows[0].image_cards}`);
+                        const file = new AttachmentBuilder(`${rows[0].image_cards}`);
                         const embed = createEmbed(rows, member)
                         card_value = rows[0].price
                         if (error === 0) {
@@ -350,7 +361,7 @@ function lootInteraction(i, client) {
                 card_value = rows[0].price
                 if (error === 0) {
                     console.log(`Loot insert double card ${rows[0].id_card} with lootbox ${i.customId} for ${member.username}`)
-                    const file = new MessageAttachment(`${rows[0].image_cards}`);
+                    const file = new AttachmentBuilder(`${rows[0].image_cards}`);
                     const embed = createEmbed(rows, member)
                     channel.send({
                         embeds: [embed],
